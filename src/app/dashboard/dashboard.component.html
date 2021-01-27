@@ -1,0 +1,33 @@
+<div class="dashboard">
+  <form #taskForm="ngForm" (ngSubmit)="addTask(taskForm)" novalidate>
+    <mat-form-field appearance="fill" class="add-task">
+      <mat-label>Add Task</mat-label>
+      <input
+        matInput
+        placeholder="New Task"
+        id="task"
+        [(ngModel)]="taskName"
+        name="task"
+        required
+      />
+    </mat-form-field>
+  </form>
+  <br />
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <mat-action-list fxFlex>
+      <mat-list-item *ngFor="let task of tasks" (click)="openTask(task)">
+        <h3 matLine>{{ task.name }}</h3>
+        <p matLine>{{ task.date | dateTimeToFormat: "MMMM, dd, yyyy" }}</p>
+        <button mat-button (click)="complete($event)">
+          <mat-icon matListIcon>done</mat-icon>
+        </button>
+        <button mat-button (click)="delete($event, task.id)">
+          <mat-icon matListIcon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-action-list>
+    <div class="task-details" *ngIf="selectedTask" fxFlex="50">
+      <app-details [task]="selectedTask"></app-details>
+    </div>
+  </div>
+</div>
