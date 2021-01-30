@@ -26,8 +26,8 @@
         </button>
       </mat-list-item>
     </mat-action-list>
-    <div class="task-details" *ngIf="selectedTask" fxFlex="50">
-      <app-details [task]="selectedTask"></app-details>
+    <div class="task-details" *ngIf="selectedTask.length > 0" fxFlex="50">
+      <app-details [task]="selectedTask[0]"></app-details>
     </div>
   </div>
 </div>

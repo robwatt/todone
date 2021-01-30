@@ -13,7 +13,7 @@ import { TaskService } from '../services/task.service';
 export class DashboardComponent implements OnInit, OnDestroy {
   taskName!: string;
   tasks: Task[] = [];
-  selectedTask!: Task;
+  selectedTask: Task[] = [];
 
   private taskSub!: Subscription;
 
@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Opens the task to see more information, such as sub items
    */
   openTask(task: Task): void {
-    this.selectedTask = task;
+    this.selectedTask = [task];
   }
 
   /**
@@ -54,8 +54,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   delete(event: any, taskId: string): void {
     event.stopPropagation();
-    if (taskId === this.selectedTask.id) {
-      this.selectedTask = null;
+    if (taskId === this.selectedTask[0].id) {
+      this.selectedTask = [];
     }
     this.taskService.removeTask(taskId);
   }
