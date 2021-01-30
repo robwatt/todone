@@ -17,7 +17,7 @@
     <mat-action-list fxFlex>
       <mat-list-item *ngFor="let subtask of task.subtask">
         <h3 matLine>{{ subtask.name }}</h3>
-        <p matLine>{{ subtask.date | dateTimeToFormat: "MMMM, dd, yyyy" }}</p>
+        <p matLine>{{ subtask.date | dateTimeToFormat: 'MMMM, dd, yyyy' }}</p>
         <button mat-button (click)="complete($event)">
           <mat-icon matListIcon>done</mat-icon>
         </button>

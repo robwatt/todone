@@ -5,4 +5,5 @@ export interface Task {
   name: string;
   date: DateTime;
   subtask?: Task[];
+  complete: boolean;
 }

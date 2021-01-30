@@ -24,6 +24,7 @@ export class TaskService {
       name: taskName,
       date: DateTime.local(),
       id: this.generatedId.toString(),
+      complete: false,
     };
     this.generatedId++;
     this.tasks.push(task);
@@ -52,6 +53,7 @@ export class TaskService {
       name: subtaskName,
       date: DateTime.local(),
       id: this.generatedId.toString(),
+      complete: false,
     };
     this.generatedId++;
     const parentTask = this.tasks[index];
@@ -71,10 +73,18 @@ export class TaskService {
     const task: Task[] = this.tasks.filter((t: Task) => t.id === taskId);
 
     if (task.length === 1) {
-      const index = task[0].subtask?.findIndex((st: Task) => st.id === subtaskId);
+      const index = task[0].subtask?.findIndex(
+        (st: Task) => st.id === subtaskId
+      );
       if (index !== undefined && index > -1) {
         task[0].subtask?.splice(index, 1);
       }
     }
   }
+
+  /**
+   * This will mark a task complete, including any subtasks.
+   * @param taskId Task ID to mark complete.  Could be a parent task, or a subtask.  If it has subtasks, those will automatically be marked complete as well.
+   */
+  markTaskComplete(taskId: string): void {}
 }
