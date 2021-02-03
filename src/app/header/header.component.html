@@ -1,6 +1,9 @@
-<mat-toolbar>
+<mat-toolbar fxLayout="row" fxLayoutAlign="center center">
+  <div fxFlex="none">
     <span>toDone</span>
-    <button mat-icon-button (click)="addTask()">
-        <mat-icon>add_task</mat-icon>
-    </button>
+  </div>
+  <div fxFlex></div>
+  <div fxFlex="nogrow">
+    <button mat-button color="primary" (click)="logout()">Logout</button>
+  </div>
 </mat-toolbar>

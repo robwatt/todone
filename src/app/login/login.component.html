@@ -1,18 +1,24 @@
-<form
-  fxLayout="column"
-  fxLayoutAlign="center center"
-  #loginForm="ngForm"
-  (ngSubmit)="login(loginForm)"
-  novalidate
->
-  <h1 class="title">toDone</h1>
-  <mat-form-field appearance="standard">
-    <mat-label>Email</mat-label>
-    <input matInput type="email" required />
-  </mat-form-field>
-  <mat-form-field appearance="standard">
-    <mat-label>Password</mat-label>
-    <input matInput type="password" required />
-  </mat-form-field>
-  <button mat-flat-button color="primary" type="submit">Sign In</button>
-</form>
+<div fxLayout="row" fxLayoutAlign="center center">
+  <mat-card class="login-card">
+    <mat-card-content>
+      <form
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        #loginForm="ngForm"
+        (ngSubmit)="login(loginForm)"
+        novalidate
+      >
+        <h1 class="title">toDone</h1>
+        <mat-form-field appearance="standard">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" required />
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" required />
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit">Sign In</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
