@@ -20,6 +20,10 @@ import { DetailsComponent } from './dashboard/details/details.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LoginComponent } from './login/login.component';
 import { MatCardModule } from '@angular/material/card';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -46,6 +50,9 @@ import { MatCardModule } from '@angular/material/card';
     MatListModule,
     MatSnackBarModule,
     MatCardModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
