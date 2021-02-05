@@ -17,8 +17,10 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   login(loginForm: NgForm): void {
-    console.log('login form', loginForm.value);
-    this.auth.login(loginForm.value.email, loginForm.value.password);
-    this.router.navigate(['dashboard']);
+    this.auth
+      .login(loginForm.value.email, loginForm.value.password)
+      .then(() => {
+        this.router.navigate(['dashboard']);
+      });
   }
 }
