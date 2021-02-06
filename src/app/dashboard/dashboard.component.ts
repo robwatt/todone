@@ -53,6 +53,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.taskService.markTaskComplete(this.selectedTask[0].id);
   }
 
+  uncomplete(event: any): void {
+    event.stopPropagation();
+  }
+
   delete(event: any, taskId: string): void {
     event.stopPropagation();
     if (taskId === this.selectedTask[0].id) {

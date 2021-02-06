@@ -20,7 +20,7 @@ export class DetailsComponent implements OnInit {
   ngOnInit(): void {
     this.taskService.subtaskSubject.subscribe((task: Task) => {
       this.task = task;
-    })
+    });
   }
 
   addSubTask(form: NgForm): void {
@@ -34,6 +34,10 @@ export class DetailsComponent implements OnInit {
    * @param event Event from the click
    */
   complete(event: any): void {
+    event.stopPropagation();
+  }
+
+  uncomplete(event: any): void {
     event.stopPropagation();
   }
 

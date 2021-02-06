@@ -16,10 +16,13 @@
   <div fxLayout="row" fxLayoutAlign="space-between">
     <mat-action-list fxFlex>
       <mat-list-item *ngFor="let subtask of task.subtask">
-        <h3 matLine>{{ subtask.name }}</h3>
-        <p matLine>{{ subtask.date | dateTimeToFormat: 'MMMM, dd, yyyy' }}</p>
-        <button mat-button (click)="complete($event)">
+        <h3 matLine [ngClass]="{'complete': subtask.complete}">{{ subtask.name }}</h3>
+        <p matLine [ngClass]="{'complete': subtask.complete}">{{ subtask.date | dateTimeToFormat: 'MMMM, dd, yyyy' }}</p>
+        <button mat-button (click)="complete($event)" *ngIf="!subtask.complete">
           <mat-icon matListIcon>done</mat-icon>
+        </button>
+        <button mat-button (click)="uncomplete($event)" *ngIf="subtask.complete">
+          <mat-icon matListIcon>clear</mat-icon>
         </button>
         <button mat-button (click)="delete($event, subtask.id)">
           <mat-icon matListIcon>delete</mat-icon>

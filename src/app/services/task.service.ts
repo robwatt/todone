@@ -15,6 +15,7 @@ export class TaskService {
 
   constructor() {
     this.taskSubject = new BehaviorSubject<Task[]>(new Array<Task>());
+    // this sends the parent task for a listener to see what subtasks have changed
     this.subtaskSubject = new Subject<Task>();
   }
 
@@ -103,6 +104,13 @@ export class TaskService {
     if (task.length === 1) {
       task[0].complete = true;
       this.taskSubject.next(this.tasks.slice());
+      // mark all subtasks as complete as well
+      if (task[0].subtask) {
+        task[0].subtask.forEach((subtask: Task) => {
+          subtask.complete = true;
+        });
+        this.subtaskSubject.next(task[0]);
+      }
     }
   }
 }
