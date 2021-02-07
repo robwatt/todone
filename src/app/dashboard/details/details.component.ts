@@ -7,15 +7,17 @@ import { TaskService } from 'src/app/services/task.service';
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
-  styleUrls: ['./details.component.scss']
+  styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-
   @Input() task!: Task;
 
   subTaskName!: string;
 
-  constructor(private taskService: TaskService, private snackBar: MatSnackBar) {}
+  constructor(
+    private taskService: TaskService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.taskService.subtaskSubject.subscribe((task: Task) => {
@@ -30,15 +32,23 @@ export class DetailsComponent implements OnInit {
   }
 
   /**
-   * Marks the task as complete and either removes it from the list, or something else
+   * Marks the task as completed.
    * @param event Event from the click
+   * @param subtaskId Subtask ID to mark as completed
    */
-  complete(event: any): void {
+  complete(event: any, subtaskId: string): void {
     event.stopPropagation();
+    this.taskService.subtaskComplete(this.task.id, subtaskId, true);
   }
 
-  uncomplete(event: any): void {
+  /**
+   * Marks the task as not completed.
+   * @param event Event from the click
+   * @param subtaskId Subtask ID to mark as not completed
+   */
+  uncomplete(event: any, subtaskId: string): void {
     event.stopPropagation();
+    this.taskService.subtaskComplete(this.task.id, subtaskId, false);
   }
 
   delete(event: any, taskId: string): void {

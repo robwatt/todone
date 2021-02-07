@@ -93,23 +93,46 @@ export class TaskService {
   }
 
   /**
-   * This will mark a task complete, including any subtasks.
-   * @param taskId Task ID to mark complete.  Could be a parent task, or a subtask.  If it has subtasks, those will automatically be marked
-   * complete as well.
+   * This will mark a task complete/not complete, including any subtasks.  This will mark all subtasks the same as the parent
+   * @param taskId Task ID to mark complete/not complete.
+   * @param complete True if the task is complete, false if the task should be marked not complete
    */
-  markTaskComplete(taskId: string): void {
-    console.log('this.tasks', this.tasks, taskId);
+  taskComplete(taskId: string, complete: boolean): void {
     const task: Task[] = this.tasks.filter((t: Task) => t.id === taskId);
 
     if (task.length === 1) {
-      task[0].complete = true;
+      task[0].complete = complete;
       this.taskSubject.next(this.tasks.slice());
       // mark all subtasks as complete as well
       if (task[0].subtask) {
         task[0].subtask.forEach((subtask: Task) => {
-          subtask.complete = true;
+          subtask.complete = complete;
         });
         this.subtaskSubject.next(task[0]);
+      }
+    }
+  }
+
+  /**
+   * Marks a subtask as complete/not complete
+   * @param parentTaskId Parent task ID
+   * @param subtaskId Subtask ID
+   * @param complete True to mark task as complete, false to mark it as not complete
+   */
+  subtaskComplete(
+    parentTaskId: string,
+    subtaskId: string,
+    complete: boolean
+  ): void {
+    const task: Task[] = this.tasks.filter((t: Task) => t.id === parentTaskId);
+    if (task.length === 1) {
+      if (task[0].subtask) {
+        // find the subtask
+        const subtask: Task[] = task[0].subtask.filter((st: Task) => st.id === subtaskId);
+        if (subtask.length === 1) {
+          subtask[0].complete = complete;
+          this.subtaskSubject.next(task[0]);
+        }
       }
     }
   }

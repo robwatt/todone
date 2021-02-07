@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { isNil } from 'lodash';
 import { Subscription } from 'rxjs';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
@@ -11,13 +12,15 @@ import { TaskService } from '../services/task.service';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  taskName!: string;
   tasks: Task[] = [];
   selectedTask: Task[] = [];
 
   private taskSub!: Subscription;
 
-  constructor(private taskService: TaskService, private snackBar: MatSnackBar) {}
+  constructor(
+    private taskService: TaskService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.taskSub = this.taskService.taskSubject.subscribe((tasks: Task[]) => {
@@ -32,7 +35,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   addTask(taskForm: NgForm): void {
-    this.taskService.addTask(this.taskName);
+    const taskName = taskForm.value.task;
+    if (isNil(taskName)) {
+      taskForm.form.controls['task'].setErrors({invalid: true});
+      // stop processing the form.
+      return;
+    }
+    this.taskService.addTask(taskForm.value.task);
     this.snackBar.open('Task added');
     taskForm.reset();
   }
@@ -45,18 +54,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Marks the task as complete and either removes it from the list, or something else
+   * Marks the task as complete.
    * @param event Event from the click
+   * @param taskId Task ID to mark as completed
    */
-  complete(event: any): void {
+  complete(event: any, taskId: string): void {
     event.stopPropagation();
-    this.taskService.markTaskComplete(this.selectedTask[0].id);
+    this.taskService.taskComplete(taskId, true);
   }
 
-  uncomplete(event: any): void {
+  /**
+   * Marks the task as not completed.
+   * @param event Event from the click
+   * @param taskId Task ID to mark as not completed
+   */
+  uncomplete(event: any, taskId: string): void {
     event.stopPropagation();
+    this.taskService.taskComplete(taskId, false);
   }
 
+  /**
+   * Deletes a task from the list
+   * @param event Event from the click
+   * @param taskId Task ID to delete
+   */
   delete(event: any, taskId: string): void {
     event.stopPropagation();
     if (taskId === this.selectedTask[0].id) {

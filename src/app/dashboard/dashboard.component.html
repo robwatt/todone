@@ -7,11 +7,11 @@
         matInput
         placeholder="New Task"
         id="task"
-        [(ngModel)]="taskName"
+        ngModel
         name="task"
-        required
       />
     </mat-form-field>
+    <p>{{taskForm.valid}}</p>
   </form>
   <br />
   <div fxLayout="row" fxLayoutAlign="space-between">
@@ -19,10 +19,10 @@
       <mat-list-item *ngFor="let task of tasks" (click)="openTask(task)">
         <h3 matLine [ngClass]="{'complete': task.complete}">{{ task.name }}</h3>
         <p matLine [ngClass]="{'complete': task.complete}">{{ task.date | dateTimeToFormat: 'MMMM, dd, yyyy' }}</p>
-        <button mat-button (click)="complete($event)" *ngIf="!task.complete">
+        <button mat-button (click)="complete($event, task.id)" *ngIf="!task.complete">
           <mat-icon matListIcon>done</mat-icon>
         </button>
-        <button mat-button (click)="uncomplete($event)" *ngIf="task.complete">
+        <button mat-button (click)="uncomplete($event, task.id)" *ngIf="task.complete">
           <mat-icon matListIcon>clear</mat-icon>
         </button>
         <button mat-button (click)="delete($event, task.id)">

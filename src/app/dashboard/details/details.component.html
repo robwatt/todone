@@ -1,5 +1,5 @@
 <h1>Task: {{ task.name }}</h1>
-<div>
+<div class="details">
   <form #subTaskForm="ngForm" (ngSubmit)="addSubTask(subTaskForm)" novalidate>
     <mat-form-field appearance="fill" class="add-subtask">
       <mat-label>Add Sub-task</mat-label>
@@ -16,12 +16,24 @@
   <div fxLayout="row" fxLayoutAlign="space-between">
     <mat-action-list fxFlex>
       <mat-list-item *ngFor="let subtask of task.subtask">
-        <h3 matLine [ngClass]="{'complete': subtask.complete}">{{ subtask.name }}</h3>
-        <p matLine [ngClass]="{'complete': subtask.complete}">{{ subtask.date | dateTimeToFormat: 'MMMM, dd, yyyy' }}</p>
-        <button mat-button (click)="complete($event)" *ngIf="!subtask.complete">
+        <h3 matLine [ngClass]="{ complete: subtask.complete }">
+          {{ subtask.name }}
+        </h3>
+        <p matLine [ngClass]="{ complete: subtask.complete }">
+          {{ subtask.date | dateTimeToFormat: 'MMMM, dd, yyyy' }}
+        </p>
+        <button
+          mat-button
+          (click)="complete($event, subtask.id)"
+          *ngIf="!subtask.complete"
+        >
           <mat-icon matListIcon>done</mat-icon>
         </button>
-        <button mat-button (click)="uncomplete($event)" *ngIf="subtask.complete">
+        <button
+          mat-button
+          (click)="uncomplete($event, subtask.id)"
+          *ngIf="subtask.complete"
+        >
           <mat-icon matListIcon>clear</mat-icon>
         </button>
         <button mat-button (click)="delete($event, subtask.id)">
