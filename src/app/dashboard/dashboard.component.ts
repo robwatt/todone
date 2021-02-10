@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isNil } from 'lodash';
+import { DateTime } from 'luxon';
 import { Subscription } from 'rxjs';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
@@ -37,7 +38,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   addTask(taskForm: NgForm): void {
     const taskName = taskForm.value.task;
     if (isNil(taskName)) {
-      taskForm.form.controls['task'].setErrors({invalid: true});
+      taskForm.form.controls.task.setErrors({invalid: true});
       // stop processing the form.
       return;
     }
@@ -84,5 +85,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.selectedTask = [];
     }
     this.taskService.removeTask(taskId);
+  }
+
+  /**
+   * Converts the firebase Timestamp into a Luxon DateTime
+   */
+  toDatetime(task: Task): DateTime {
+    return DateTime.fromJSDate(task.date.toDate());
   }
 }

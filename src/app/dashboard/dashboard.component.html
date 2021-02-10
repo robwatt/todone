@@ -11,14 +11,13 @@
         name="task"
       />
     </mat-form-field>
-    <p>{{taskForm.valid}}</p>
   </form>
   <br />
   <div fxLayout="row" fxLayoutAlign="space-between">
     <mat-action-list fxFlex>
       <mat-list-item *ngFor="let task of tasks" (click)="openTask(task)">
         <h3 matLine [ngClass]="{'complete': task.complete}">{{ task.name }}</h3>
-        <p matLine [ngClass]="{'complete': task.complete}">{{ task.date | dateTimeToFormat: 'MMMM, dd, yyyy' }}</p>
+        <p matLine [ngClass]="{'complete': task.complete}">{{ toDatetime(task) | dateTimeToFormat: 'MMMM, dd, yyyy' }}</p>
         <button mat-button (click)="complete($event, task.id)" *ngIf="!task.complete">
           <mat-icon matListIcon>done</mat-icon>
         </button>

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DateTime } from 'luxon';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -54,5 +55,12 @@ export class DetailsComponent implements OnInit {
   delete(event: any, taskId: string): void {
     event.stopPropagation();
     this.taskService.removeSubTask(this.task.id, taskId);
+  }
+
+  /**
+   * Converts the firebase Timestamp into a Luxon DateTime
+   */
+  toDatetime(task: Task): DateTime {
+    return DateTime.fromJSDate(task.date.toDate());
   }
 }

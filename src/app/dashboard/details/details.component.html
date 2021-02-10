@@ -20,7 +20,7 @@
           {{ subtask.name }}
         </h3>
         <p matLine [ngClass]="{ complete: subtask.complete }">
-          {{ subtask.date | dateTimeToFormat: 'MMMM, dd, yyyy' }}
+          {{ toDatetime(subtask) | dateTimeToFormat: 'MMMM, dd, yyyy' }}
         </p>
         <button
           mat-button

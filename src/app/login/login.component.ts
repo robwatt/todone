@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   login(loginForm: NgForm): void {
     this.auth
       .login(loginForm.value.email, loginForm.value.password)
-      .then(() => {
+      .subscribe(() => {
         this.router.navigate(['dashboard']);
       });
   }

@@ -1,9 +1,9 @@
-import { DateTime } from 'luxon';
+import firebase from 'firebase/app';
 
 export interface Task {
   id: string;
   name: string;
-  date: DateTime;
+  date: firebase.firestore.Timestamp;
   subtask?: Task[];
   complete: boolean;
 }
