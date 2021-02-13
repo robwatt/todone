@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import firebase from 'firebase/app';
 import { from, Observable, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import firebase from 'firebase/app';
-import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private user!: any;
+  private user: any;
 
   loggedIn: ReplaySubject<boolean> = new ReplaySubject();
 
@@ -19,14 +18,18 @@ export class AuthenticationService {
         this.user = user;
         localStorage.setItem('user', JSON.stringify(this.user));
         this.loggedIn.next(true);
-      }
-      else {
+      } else {
         localStorage.removeItem('user');
         this.loggedIn.next(false);
       }
     });
   }
 
+  /**
+   * Logs the user into the system, if they exist in the db.
+   * @param email Email of the user
+   * @param password Password for the account
+   */
   login(email: string, password: string): Observable<any> {
     return from(this.auth.signInWithEmailAndPassword(email, password)).pipe(
       tap((user: firebase.auth.UserCredential) => {
@@ -36,6 +39,9 @@ export class AuthenticationService {
     );
   }
 
+  /**
+   * Logs the user out of the system
+   */
   logout(): Promise<any> {
     this.loggedIn.next(false);
     return this.auth.signOut();
@@ -51,21 +57,5 @@ export class AuthenticationService {
     }
     // maybe throw an exception since the user is clearly logged out
     return undefined;
-  }
-
-  get isLoggedIn(): boolean {
-    const item = localStorage.getItem('user');
-    if (item) {
-      const user = JSON.parse(item);
-      return (user !== null && user.uid !== null);
-    }
-    return false;
-  }
-
-  private setUser(user: any): void {
-    const userData: User = {
-      uid: user.uid,
-      email: user.email
-    };
   }
 }

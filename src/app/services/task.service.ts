@@ -4,10 +4,10 @@ import {
   AngularFirestoreCollection,
   QuerySnapshot,
 } from '@angular/fire/firestore';
+import firebase from 'firebase/app';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { Task } from '../models/task';
 import { AuthenticationService } from './authentication.service';
-import firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
@@ -108,11 +108,13 @@ export class TaskService implements OnDestroy {
   taskComplete(taskId: string, complete: boolean): void {
     this.taskCollection.doc(taskId).update({ complete });
     // need to update all subtasks - this task may not be 'opened', which means the subtask collection is not valid to use
-    const subtaskCollection = this.taskCollection.doc(taskId).collection<Task>('subtask');
+    const subtaskCollection = this.taskCollection
+      .doc(taskId)
+      .collection<Task>('subtask');
     subtaskCollection.get().subscribe((query: QuerySnapshot<Task>) => {
       query.forEach((doc) => {
         doc.ref.update({
-          complete
+          complete,
         });
       });
     });
@@ -123,11 +125,8 @@ export class TaskService implements OnDestroy {
    * @param subtaskId Subtask ID
    * @param complete True to mark task as complete, false to mark it as not complete
    */
-  subtaskComplete(
-    subtaskId: string,
-    complete: boolean
-  ): void {
-    this.subtaskCollection.doc(subtaskId).update({complete});
+  subtaskComplete(subtaskId: string, complete: boolean): void {
+    this.subtaskCollection.doc(subtaskId).update({ complete });
   }
 
   /**
