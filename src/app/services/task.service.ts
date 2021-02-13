@@ -16,7 +16,6 @@ export class TaskService implements OnDestroy {
   private taskCollection!: AngularFirestoreCollection<Task>;
   private subtaskCollection!: AngularFirestoreCollection<Task>;
 
-  tasks: Task[] = [];
   taskItems: Observable<Task[]>;
   taskSub: Subscription;
   taskSubject: Subject<Task[]>;
@@ -40,9 +39,8 @@ export class TaskService implements OnDestroy {
           this.taskCollection = this.afs.collection<Task>(uid);
           this.taskItems = this.taskCollection.valueChanges({ idField: 'id' });
           this.taskSub = this.taskItems.subscribe((tasks: Task[]) => {
-            this.tasks = tasks;
             // return a copy of the original array, this way nobody can modify the array outside of the service.
-            this.taskSubject.next(this.tasks.slice());
+            this.taskSubject.next(tasks.slice());
           });
         }
       }
@@ -148,7 +146,7 @@ export class TaskService implements OnDestroy {
       .collection('subtask');
     this.subtaskItems = this.subtaskCollection.valueChanges({ idField: 'id' });
     this.subtaskSub = this.subtaskItems.subscribe((subtasks: Task[]) => {
-      this.subtaskSubject.next(subtasks);
+      this.subtaskSubject.next(subtasks.slice());
     });
   }
 
