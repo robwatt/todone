@@ -36,7 +36,6 @@ export class TaskService {
           this.taskCollection = this.afs.collection<Task>(uid);
           this.taskItems = this.taskCollection.valueChanges({ idField: 'id' });
           this.taskItems.subscribe((tasks: Task[]) => {
-            console.log('tasks', tasks);
             this.tasks = tasks;
             // return a copy of the original array, this way nobody can modify the array outside of the service.
             this.taskSubject.next(this.tasks.slice());
