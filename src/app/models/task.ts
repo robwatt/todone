@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 
 export interface Task {
-  id: string;
+  id?: string;
   name: string;
   date: firebase.firestore.Timestamp;
   subtask?: Task[];

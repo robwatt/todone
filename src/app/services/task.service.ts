@@ -66,7 +66,6 @@ export class TaskService implements OnDestroy {
     const task = {
       name: taskName,
       date: firebase.firestore.Timestamp.now(),
-      id: '',
       complete: false,
     };
     this.taskCollection.add(task);
@@ -88,7 +87,6 @@ export class TaskService implements OnDestroy {
     const subtask = {
       name: subtaskName,
       date: firebase.firestore.Timestamp.now(),
-      id: '',
       complete: false,
     };
     this.subtaskCollection.add(subtask);
