@@ -11,7 +11,8 @@ import { TaskService } from 'src/app/services/task.service';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-  // this is the parent task
+  // this is the parent task - used to show the task name
+  // may replace this at a later date when I have a better UX
   @Input() task: Task;
 
   subtasks: Task[];
@@ -29,7 +30,7 @@ export class DetailsComponent implements OnInit {
   }
 
   addSubTask(form: NgForm): void {
-    this.taskService.addSubTask(this.task.id, this.subTaskName);
+    this.taskService.addSubTask(this.subTaskName);
     this.snackBar.open('Sub-task added');
     form.reset();
   }
@@ -41,7 +42,7 @@ export class DetailsComponent implements OnInit {
    */
   complete(event: any, subtaskId: string): void {
     event.stopPropagation();
-    this.taskService.subtaskComplete(this.task.id, subtaskId, true);
+    this.taskService.subtaskComplete(subtaskId, true);
   }
 
   /**
@@ -51,12 +52,12 @@ export class DetailsComponent implements OnInit {
    */
   uncomplete(event: any, subtaskId: string): void {
     event.stopPropagation();
-    this.taskService.subtaskComplete(this.task.id, subtaskId, false);
+    this.taskService.subtaskComplete(subtaskId, false);
   }
 
   delete(event: any, taskId: string): void {
     event.stopPropagation();
-    this.taskService.removeSubTask(this.task.id, taskId);
+    this.taskService.removeSubTask(taskId);
   }
 
   /**

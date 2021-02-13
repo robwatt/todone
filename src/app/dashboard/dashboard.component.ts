@@ -52,6 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   openTask(task: Task): void {
     this.selectedTask = [task];
+    this.taskService.openTask(task.id);
   }
 
   /**

@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
+  QuerySnapshot,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { Task } from '../models/task';
@@ -11,12 +12,13 @@ import firebase from 'firebase/app';
 @Injectable({
   providedIn: 'root',
 })
-export class TaskService {
+export class TaskService implements OnDestroy {
   private taskCollection!: AngularFirestoreCollection<Task>;
   private subtaskCollection!: AngularFirestoreCollection<Task>;
 
   tasks: Task[] = [];
   taskItems: Observable<Task[]>;
+  taskSub: Subscription;
   taskSubject: Subject<Task[]>;
 
   subtaskItems: Observable<Task[]>;
@@ -37,7 +39,7 @@ export class TaskService {
         if (uid) {
           this.taskCollection = this.afs.collection<Task>(uid);
           this.taskItems = this.taskCollection.valueChanges({ idField: 'id' });
-          this.taskItems.subscribe((tasks: Task[]) => {
+          this.taskSub = this.taskItems.subscribe((tasks: Task[]) => {
             this.tasks = tasks;
             // return a copy of the original array, this way nobody can modify the array outside of the service.
             this.taskSubject.next(this.tasks.slice());
@@ -45,6 +47,16 @@ export class TaskService {
         }
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.closeTask();
+    if (this.taskSub) {
+      this.taskSub.unsubscribe();
+      this.taskSub = null;
+      this.taskItems = null;
+      this.taskCollection = null;
+    }
   }
 
   /**
@@ -71,50 +83,25 @@ export class TaskService {
   }
 
   /**
-   * Adds a subtask to the given parent task
-   * @param taskId Parent taskID to associate the new subtask to
+   * Adds a subtask to the currently 'opened' task
    * @param subtaskName Subtask name/desciption to add
    */
-  addSubTask(taskId: string, subtaskName: string): void {
+  addSubTask(subtaskName: string): void {
     const subtask = {
       name: subtaskName,
       date: firebase.firestore.Timestamp.now(),
       id: '',
       complete: false,
     };
-
-    // if we are adding a subtask, then this task is in view
-    if (this.subtaskSub) {
-      this.subtaskSub.unsubscribe();
-      this.subtaskSub = null;
-      this.subtaskItems = null;
-      this.subtaskCollection = null;
-    }
-
-    this.subtaskCollection = this.taskCollection.doc(taskId).collection('subtask');
-    this.subtaskItems = this.subtaskCollection.valueChanges({idField: 'id'});
-    this.subtaskSub = this.subtaskItems.subscribe((subtasks: Task[]) => {
-      this.subtaskSubject.next(subtasks);
-    });
     this.subtaskCollection.add(subtask);
   }
 
   /**
-   * Removes a subtask from the given task
-   * @param taskId Parent taskId
+   * Removes a subtask from the currently 'opened' task
    * @param subtaskId Id of the subtask to remove
    */
-  removeSubTask(taskId: string, subtaskId: string): void {
-    const task: Task[] = this.tasks.filter((t: Task) => t.id === taskId);
-
-    if (task.length === 1) {
-      const index = task[0].subtask?.findIndex(
-        (st: Task) => st.id === subtaskId
-      );
-      if (index !== undefined && index > -1) {
-        task[0].subtask?.splice(index, 1);
-      }
-    }
+  removeSubTask(subtaskId: string): void {
+    this.subtaskCollection.doc(subtaskId).delete();
   }
 
   /**
@@ -123,47 +110,57 @@ export class TaskService {
    * @param complete True if the task is complete, false if the task should be marked not complete
    */
   taskComplete(taskId: string, complete: boolean): void {
-    // const task: Task[] = this.tasks.filter((t: Task) => t.id === taskId);
-
-    // if (task.length === 1) {
-    //   task[0].complete = complete;
-    //   this.taskSubject.next(this.tasks.slice());
-    //   // mark all subtasks as complete as well
-    //   if (task[0].subtask) {
-    //     task[0].subtask.forEach((subtask: Task) => {
-    //       subtask.complete = complete;
-    //     });
-    //     this.subtaskSubject.next(task[0]);
-    //   }
-    // }
-
-    this.taskCollection.doc(taskId).update({complete});
-    // need to update all subtasks
+    this.taskCollection.doc(taskId).update({ complete });
+    // need to update all subtasks - this task may not be 'opened', which means the subtask collection is not valid to use
+    const subtaskCollection = this.taskCollection.doc(taskId).collection<Task>('subtask');
+    subtaskCollection.get().subscribe((query: QuerySnapshot<Task>) => {
+      query.forEach((doc) => {
+        doc.ref.update({
+          complete
+        });
+      });
+    });
   }
 
   /**
-   * Marks a subtask as complete/not complete
-   * @param parentTaskId Parent task ID
+   * Marks a single subtask as complete/not complete.  This subtask should be in the 'opened' task.
    * @param subtaskId Subtask ID
    * @param complete True to mark task as complete, false to mark it as not complete
    */
   subtaskComplete(
-    parentTaskId: string,
     subtaskId: string,
     complete: boolean
   ): void {
-    const task: Task[] = this.tasks.filter((t: Task) => t.id === parentTaskId);
-    if (task.length === 1) {
-      if (task[0].subtask) {
-        // find the subtask
-        const subtask: Task[] = task[0].subtask.filter(
-          (st: Task) => st.id === subtaskId
-        );
-        if (subtask.length === 1) {
-          subtask[0].complete = complete;
-          // this.subtaskSubject.next(task[0]);
-        }
-      }
+    this.subtaskCollection.doc(subtaskId).update({complete});
+  }
+
+  /**
+   * Indicates to the service that a task is being 'opened'.  This will make the service start
+   * listening to the subtask collection as well.  If an existing collection was being listened to
+   * it will be unscribed from.
+   */
+  openTask(taskId: string): void {
+    // if we are adding a subtask, then this task is in view
+    this.closeTask();
+
+    this.subtaskCollection = this.taskCollection
+      .doc(taskId)
+      .collection('subtask');
+    this.subtaskItems = this.subtaskCollection.valueChanges({ idField: 'id' });
+    this.subtaskSub = this.subtaskItems.subscribe((subtasks: Task[]) => {
+      this.subtaskSubject.next(subtasks);
+    });
+  }
+
+  /**
+   * Clears any open subtask collection being listened to
+   */
+  private closeTask(): void {
+    if (this.subtaskSub) {
+      this.subtaskSub.unsubscribe();
+      this.subtaskSub = null;
+      this.subtaskItems = null;
+      this.subtaskCollection = null;
     }
   }
 }
