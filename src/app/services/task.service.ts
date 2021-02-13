@@ -65,12 +65,7 @@ export class TaskService {
    * @param taskId TaskID to remove
    */
   removeTask(taskId: string): void {
-    const index = this.tasks.findIndex((task: Task) => task.id === taskId);
-    if (index > -1) {
-      this.tasks.splice(index, 1);
-    }
-    // return a copy of the original array, this way nobody can modify the array outside of the service
-    this.taskSubject.next(this.tasks.slice());
+    this.taskCollection.doc(taskId).delete();
   }
 
   /**
@@ -121,19 +116,22 @@ export class TaskService {
    * @param complete True if the task is complete, false if the task should be marked not complete
    */
   taskComplete(taskId: string, complete: boolean): void {
-    const task: Task[] = this.tasks.filter((t: Task) => t.id === taskId);
+    // const task: Task[] = this.tasks.filter((t: Task) => t.id === taskId);
 
-    if (task.length === 1) {
-      task[0].complete = complete;
-      this.taskSubject.next(this.tasks.slice());
-      // mark all subtasks as complete as well
-      if (task[0].subtask) {
-        task[0].subtask.forEach((subtask: Task) => {
-          subtask.complete = complete;
-        });
-        this.subtaskSubject.next(task[0]);
-      }
-    }
+    // if (task.length === 1) {
+    //   task[0].complete = complete;
+    //   this.taskSubject.next(this.tasks.slice());
+    //   // mark all subtasks as complete as well
+    //   if (task[0].subtask) {
+    //     task[0].subtask.forEach((subtask: Task) => {
+    //       subtask.complete = complete;
+    //     });
+    //     this.subtaskSubject.next(task[0]);
+    //   }
+    // }
+
+    this.taskCollection.doc(taskId).update({complete});
+    // need to update all subtasks
   }
 
   /**
