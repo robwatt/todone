@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   addTask(taskForm: NgForm): void {
     const taskName = taskForm.value.task;
     if (isNil(taskName)) {
-      taskForm.form.controls.task.setErrors({invalid: true});
+      taskForm.form.controls.task.setErrors({ invalid: true });
       // stop processing the form.
       return;
     }
@@ -81,7 +81,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   delete(event: any, taskId: string): void {
     event.stopPropagation();
-    if (taskId === this.selectedTask[0].id) {
+    // if the task to be deleted is also selected, reset the selection, this will hide the subtask panel.
+    if (this.selectedTask[0] && taskId === this.selectedTask[0].id) {
       this.selectedTask = [];
     }
     this.taskService.removeTask(taskId);
