@@ -15,7 +15,7 @@
   </form>
   <div fxLayout="row" fxLayoutAlign="space-between">
     <mat-action-list fxFlex>
-      <mat-list-item *ngFor="let subtask of task.subtask">
+      <mat-list-item *ngFor="let subtask of subtasks">
         <h3 matLine [ngClass]="{ complete: subtask.complete }">
           {{ subtask.name }}
         </h3>

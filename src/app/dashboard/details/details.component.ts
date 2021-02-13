@@ -11,9 +11,11 @@ import { TaskService } from 'src/app/services/task.service';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-  @Input() task!: Task;
+  // this is the parent task
+  @Input() task: Task;
 
-  subTaskName!: string;
+  subtasks: Task[];
+  subTaskName: string;
 
   constructor(
     private taskService: TaskService,
@@ -21,8 +23,8 @@ export class DetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.taskService.subtaskSubject.subscribe((task: Task) => {
-      this.task = task;
+    this.taskService.subtaskSubject.subscribe((subtasks: Task[]) => {
+      this.subtasks = subtasks;
     });
   }
 
