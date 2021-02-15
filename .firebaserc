@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "todone-3f74b": {
+      "hosting": {
+        "toDone": [
+          "todone-3f74b"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "todone-3f74b"
+  }
+}
