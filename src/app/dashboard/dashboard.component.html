@@ -9,29 +9,15 @@
   <br />
   <div fxLayout="row" fxLayoutAlign="space-between">
     <mat-action-list fxFlex>
-      <mat-list-item *ngFor="let task of tasks" (click)="openTask(task)">
-        <h3 matLine [ngClass]="{ complete: task.complete }">{{ task.name }}</h3>
-        <p matLine [ngClass]="{ complete: task.complete }">
-          {{ toDatetime(task) | dateTimeToFormat: 'MMMM, dd, yyyy' }}
-        </p>
-        <button
-          mat-button
-          (click)="complete($event, task.id)"
-          *ngIf="!task.complete"
-        >
-          <mat-icon matListIcon>done</mat-icon>
-        </button>
-        <button
-          mat-button
-          (click)="uncomplete($event, task.id)"
-          *ngIf="task.complete"
-        >
-          <mat-icon matListIcon>clear</mat-icon>
-        </button>
-        <button mat-button (click)="delete($event, task.id)">
-          <mat-icon matListIcon>delete</mat-icon>
-        </button>
-      </mat-list-item>
+      <app-task
+        *ngFor="let task of tasks"
+        [task]="task"
+        (openTask)="openTask($event)"
+        (deleteTask)="delete($event)"
+        (completeTask)="complete($event)"
+        (uncompleteTask)="uncomplete($event)"
+      >
+      </app-task>
     </mat-action-list>
     <div class="task-details" *ngIf="selectedTask.length > 0" fxFlex="50">
       <app-details [task]="selectedTask[0]"></app-details>

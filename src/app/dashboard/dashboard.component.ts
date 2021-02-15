@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isNil } from 'lodash';
-import { DateTime } from 'luxon';
 import { Subscription } from 'rxjs';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
@@ -16,7 +15,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
   selectedTask: Task[] = [];
 
-  private taskSub!: Subscription;
+  private taskSub: Subscription;
 
   constructor(
     private taskService: TaskService,
@@ -57,42 +56,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /**
    * Marks the task as complete.
-   * @param event Event from the click
    * @param taskId Task ID to mark as completed
    */
-  complete(event: any, taskId: string): void {
-    event.stopPropagation();
+  complete(taskId: string): void {
     this.taskService.taskComplete(taskId, true);
   }
 
   /**
    * Marks the task as not completed.
-   * @param event Event from the click
    * @param taskId Task ID to mark as not completed
    */
-  uncomplete(event: any, taskId: string): void {
-    event.stopPropagation();
+  uncomplete(taskId: string): void {
     this.taskService.taskComplete(taskId, false);
   }
 
   /**
    * Deletes a task from the list
-   * @param event Event from the click
    * @param taskId Task ID to delete
    */
-  delete(event: any, taskId: string): void {
-    event.stopPropagation();
+  delete(taskId: string): void {
     // if the task to be deleted is also selected, reset the selection, this will hide the subtask panel.
     if (this.selectedTask[0] && taskId === this.selectedTask[0].id) {
       this.selectedTask = [];
     }
     this.taskService.removeTask(taskId);
-  }
-
-  /**
-   * Converts the firebase Timestamp into a Luxon DateTime
-   */
-  toDatetime(task: Task): DateTime {
-    return DateTime.fromJSDate(task.date.toDate());
   }
 }
