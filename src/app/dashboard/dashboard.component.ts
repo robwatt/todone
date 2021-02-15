@@ -42,7 +42,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return;
     }
     this.taskService.addTask(taskForm.value.task);
-    this.snackBar.open('Task added');
+    this.snackBar.open('Task added', 'Dismiss', {
+      duration: 3000
+    });
     taskForm.reset();
   }
 

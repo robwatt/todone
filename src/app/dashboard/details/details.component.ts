@@ -30,7 +30,9 @@ export class DetailsComponent implements OnInit {
 
   addSubTask(form: NgForm): void {
     this.taskService.addSubTask(this.subTaskName);
-    this.snackBar.open('Sub-task added');
+    this.snackBar.open('Sub-task added', 'Dismiss', {
+      duration: 3000,
+    });
     form.reset();
   }
 
