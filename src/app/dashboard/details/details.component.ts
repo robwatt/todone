@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DateTime } from 'luxon';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -31,39 +30,29 @@ export class DetailsComponent implements OnInit {
 
   addSubTask(form: NgForm): void {
     this.taskService.addSubTask(this.subTaskName);
-    this.snackBar.open('Sub-task added');
+    this.snackBar.open('Sub-task added', 'Dismiss', {
+      duration: 3000,
+    });
     form.reset();
   }
 
   /**
    * Marks the task as completed.
-   * @param event Event from the click
    * @param subtaskId Subtask ID to mark as completed
    */
-  complete(event: any, subtaskId: string): void {
-    event.stopPropagation();
+  complete(subtaskId: string): void {
     this.taskService.subtaskComplete(subtaskId, true);
   }
 
   /**
    * Marks the task as not completed.
-   * @param event Event from the click
    * @param subtaskId Subtask ID to mark as not completed
    */
-  uncomplete(event: any, subtaskId: string): void {
-    event.stopPropagation();
+  uncomplete(subtaskId: string): void {
     this.taskService.subtaskComplete(subtaskId, false);
   }
 
-  delete(event: any, taskId: string): void {
-    event.stopPropagation();
-    this.taskService.removeSubTask(taskId);
-  }
-
-  /**
-   * Converts the firebase Timestamp into a Luxon DateTime
-   */
-  toDatetime(task: Task): DateTime {
-    return DateTime.fromJSDate(task.date.toDate());
+  delete(subtaskId: string): void {
+    this.taskService.removeSubTask(subtaskId);
   }
 }
