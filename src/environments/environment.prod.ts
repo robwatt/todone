@@ -7,6 +7,6 @@ export const environment = {
     storageBucket: 'todone-3f74b.appspot.com',
     messagingSenderId: '255752351527',
     appId: '1:255752351527:web:2feccae076235e382bc302',
-    measurementId: 'G-334D9ZEFX8',
-  },
+    measurementId: 'G-334D9ZEFX8'
+  }
 };
