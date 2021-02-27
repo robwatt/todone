@@ -1,35 +1,35 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { LoggedInGuard } from 'ngx-auth-firebaseui';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
-import {
-  AngularFireAuthGuard,
-  redirectLoggedInTo,
-} from '@angular/fire/auth-guard';
-
-const redirectLoggedInToDashboard = () => redirectLoggedInTo(['dashboard']);
+import { NavigationComponent } from './navigation/navigation.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent,
-    canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectLoggedInToDashboard },
+    component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [AngularFireAuthGuard],
+    component: NavigationComponent,
+    canActivate: [LoggedInGuard],
+    children: [{ path: '', component: DashboardComponent }]
   },
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
+    redirectTo: 'dashboard',
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}
