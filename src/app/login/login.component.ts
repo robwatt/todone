@@ -1,26 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthProvider } from 'ngx-auth-firebaseui';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  email!: string;
-  password!: string;
 
-  constructor(private router: Router, private auth: AuthenticationService) {}
+  providers = AuthProvider;
 
-  ngOnInit(): void {}
+  constructor(private router: Router) { }
 
-  login(loginForm: NgForm): void {
-    this.auth
-      .login(loginForm.value.email, loginForm.value.password)
-      .subscribe(() => {
-        this.router.navigate(['dashboard']);
-      });
+  ngOnInit(): void {
+  }
+
+  loggedIn(event: any): void {
+    this.router.navigate(['dashboard']);
+  }
+
+  createAccount(): void {
+    this.router.navigate(['register']);
   }
 }
