@@ -36,7 +36,7 @@ export class TaskService implements OnDestroy {
       if (result) {
         const uid = this.auth.getUID();
         if (uid) {
-          this.taskCollection = this.afs.collection<Task>(uid);
+          this.taskCollection = this.afs.collection<Task>(`users/${uid}/todo`);
           this.taskItems = this.taskCollection.valueChanges({ idField: 'id' });
           this.taskSub = this.taskItems.subscribe((tasks: Task[]) => {
             // return a copy of the original array, this way nobody can modify the array outside of the service.
