@@ -1,4 +1,5 @@
-<h1>Task: {{ task.name }}</h1>
+<h1>Task</h1>
+<p>{{ task.name }}</p>
 <div class="details">
   <form #subTaskForm="ngForm" (ngSubmit)="addSubTask(subTaskForm)" novalidate>
     <mat-form-field appearance="fill" class="add-subtask">
@@ -18,6 +19,7 @@
       <app-task
         *ngFor="let subtask of subtasks"
         [task]="subtask"
+        [level]="1"
         (deleteTask)="delete($event)"
         (completeTask)="complete($event)"
         (uncompleteTask)="uncomplete($event)"

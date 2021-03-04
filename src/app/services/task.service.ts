@@ -80,6 +80,24 @@ export class TaskService implements OnDestroy {
   }
 
   /**
+   * Updates the parent task with the new provided data.
+   * @param taskId Parent task IDs
+   * @param newData New data to update the task with (this is partial data)
+   */
+  updateTask(taskId: string, newData: any): void {
+    this.taskCollection.doc(taskId).update(newData);
+  }
+
+  /**
+   * Updates the subtask with the new provided data
+   * @param subtaskId Subtask task ID
+   * @param newData New data to update the task with (this is partial data)
+   */
+  updateSubtask(subtaskId: string, newData: any): void {
+    this.subtaskCollection.doc(subtaskId).update(newData);
+  }
+
+  /**
    * Adds a subtask to the currently 'opened' task
    * @param subtaskName Subtask name/desciption to add
    */
