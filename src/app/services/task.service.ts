@@ -36,7 +36,7 @@ export class TaskService implements OnDestroy {
       if (result) {
         const uid = this.auth.getUID();
         if (uid) {
-          this.taskCollection = this.afs.collection<Task>(`users/${uid}/todo`);
+          this.taskCollection = this.afs.collection<Task>(`users/${uid}/todo`, ref => ref.orderBy('date'));
           this.taskItems = this.taskCollection.valueChanges({ idField: 'id' });
           this.taskSub = this.taskItems.subscribe((tasks: Task[]) => {
             // return a copy of the original array, this way nobody can modify the array outside of the service.
@@ -128,7 +128,7 @@ export class TaskService implements OnDestroy {
     // need to update all subtasks - this task may not be 'opened', which means the subtask collection is not valid to use
     const subtaskCollection = this.taskCollection
       .doc(taskId)
-      .collection<Task>('subtask');
+      .collection<Task>('subtask', ref => ref.orderBy('date'));
     subtaskCollection.get().subscribe((query: QuerySnapshot<Task>) => {
       query.forEach((doc) => {
         doc.ref.update({
