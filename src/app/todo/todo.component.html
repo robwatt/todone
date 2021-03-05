@@ -1,25 +1,38 @@
 <div class="dashboard">
-  <form #taskForm="ngForm" (ngSubmit)="addTask(taskForm)" novalidate>
-    <mat-form-field appearance="fill" class="add-task">
-      <mat-label>Add Task</mat-label>
-      <input matInput placeholder="New Task" id="task" ngModel name="task" />
-    </mat-form-field>
-  </form>
-  <br />
-  <div fxLayout="row" fxLayoutAlign="space-between" class="task">
-    <mat-action-list fxFlex>
-      <app-task
-        *ngFor="let task of tasks"
-        [task]="task"
-        (openTask)="openTask($event)"
-        (deleteTask)="delete($event)"
-        (completeTask)="complete($event)"
-        (uncompleteTask)="uncomplete($event)"
-      >
-      </app-task>
-    </mat-action-list>
-    <div class="task-details" *ngIf="selectedTask.length > 0" fxFlex="50">
-      <app-details [level]="1" [task]="selectedTask[0]"></app-details>
-    </div>
-  </div>
+  <mat-tab-group mat-align-tabs="start">
+    <mat-tab label="Ongoing">
+      <form #taskForm="ngForm" (ngSubmit)="addTask(taskForm)" novalidate>
+        <mat-form-field appearance="fill" class="add-task">
+          <mat-label>Add task</mat-label>
+          <input
+            matInput
+            placeholder="New Task"
+            id="task"
+            ngModel
+            name="task"
+          />
+        </mat-form-field>
+      </form>
+      <br />
+      <div fxLayout="row" fxLayoutAlign="space-between" class="task">
+        <mat-action-list fxFlex>
+          <app-task
+            *ngFor="let task of tasks"
+            [task]="task"
+            (openTask)="openTask($event)"
+            (deleteTask)="delete($event)"
+            (completeTask)="complete($event)"
+            (uncompleteTask)="uncomplete($event)"
+          >
+          </app-task>
+        </mat-action-list>
+        <div class="task-details" *ngIf="selectedTask.length > 0" fxFlex="50">
+          <app-details [level]="1" [task]="selectedTask[0]"></app-details>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Completed">
+      <p>Completed tasks -- TBD</p>
+    </mat-tab>
+  </mat-tab-group>
 </div>
