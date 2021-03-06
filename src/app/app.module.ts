@@ -30,8 +30,10 @@ import { LoginComponent } from './login/login.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { RegisterComponent } from './register/register.component';
 import { TaskComponent } from './task/task.component';
+import { AddTaskFieldComponent } from './todo/add-task-field/add-task-field.component';
 import { DetailsComponent } from './todo/details/details.component';
 import { EditContentComponent } from './todo/edit-content/edit-content.component';
+import { TaskListComponent } from './todo/task-list/task-list.component';
 import { TodoComponent } from './todo/todo.component';
 
 @NgModule({
@@ -45,7 +47,9 @@ import { TodoComponent } from './todo/todo.component';
     TodoComponent,
     DetailsComponent,
     TaskComponent,
-    EditContentComponent
+    EditContentComponent,
+    AddTaskFieldComponent,
+    TaskListComponent
   ],
   imports: [
     BrowserModule,

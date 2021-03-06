@@ -1,0 +1,16 @@
+<div fxLayout="row" fxLayoutAlign="space-between" class="task">
+    <mat-action-list fxFlex>
+      <app-task
+        *ngFor="let task of tasks"
+        [task]="task"
+        (openTask)="openTask($event)"
+        (deleteTask)="delete($event)"
+        (completeTask)="complete($event)"
+        (uncompleteTask)="uncomplete($event)"
+      >
+      </app-task>
+    </mat-action-list>
+    <div class="task-details" *ngIf="selectedTask.length > 0" fxFlex="50">
+      <app-details [level]="1" [task]="selectedTask[0]"></app-details>
+    </div>
+  </div>
