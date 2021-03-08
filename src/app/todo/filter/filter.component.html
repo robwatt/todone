@@ -1,0 +1,24 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+  <button mat-stroked-button [matMenuTriggerFor]="menu">
+    <mat-icon>filter_list</mat-icon><span>filter</span>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button
+      *ngFor="let filter of availableFilters"
+      mat-menu-item
+      (click)="applyFilter(filter)"
+    >
+      <span>{{ filter.displayName }}</span>
+    </button>
+  </mat-menu>
+  <mat-chip-list class="filter-divider">
+    <mat-chip
+      *ngFor="let filter of filterList"
+      removable="true"
+      (removed)="removeFilter(filter)"
+    >
+      {{ filter.displayName }}
+      <mat-icon matChipRemove>cancel</mat-icon></mat-chip
+    >
+  </mat-chip-list>
+</div>

@@ -7,6 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./todo.component.scss']
 })
 export class TodoComponent {
+  appliedFilterEvent: Event;
+
   constructor(private snackBar: MatSnackBar) {}
 
   /**
@@ -16,5 +18,9 @@ export class TodoComponent {
     this.snackBar.open('Task added', 'Dismiss', {
       duration: 3000
     });
+  }
+
+  appliedFiltersChanged(event: Event): void {
+    this.appliedFilterEvent = event;
   }
 }

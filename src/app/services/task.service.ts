@@ -2,33 +2,38 @@ import { Injectable, OnDestroy } from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-  QuerySnapshot,
+  Query,
+  QuerySnapshot
 } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { Filter } from '../models/filter';
 import { Task } from '../models/task';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class TaskService implements OnDestroy {
   private taskCollection!: AngularFirestoreCollection<Task>;
   private subtaskCollection!: AngularFirestoreCollection<Task>;
 
   taskItems: Observable<Task[]>;
-  taskSub: Subscription;
-  taskSubject: Subject<Task[]>;
+  // maintains the state of the service
+  taskState: Subject<string>;
 
+  // TODO: cleanup the subtask observables like I did with the tasks
   subtaskItems: Observable<Task[]>;
   subtaskSub: Subscription;
   subtaskSubject: Subject<Task[]>;
+
+  taskObservable: Observable<Task[]>;
 
   constructor(
     private afs: AngularFirestore,
     private auth: AuthenticationService
   ) {
-    this.taskSubject = new BehaviorSubject<Task[]>(new Array<Task>());
+    this.taskState = new BehaviorSubject<string>('uninitialized');
     // this sends the parent task for a listener to see what subtasks have changed
     this.subtaskSubject = new Subject<Task[]>();
 
@@ -36,25 +41,49 @@ export class TaskService implements OnDestroy {
       if (result) {
         const uid = this.auth.getUID();
         if (uid) {
-          this.taskCollection = this.afs.collection<Task>(`users/${uid}/todo`, ref => ref.orderBy('date'));
-          this.taskItems = this.taskCollection.valueChanges({ idField: 'id' });
-          this.taskSub = this.taskItems.subscribe((tasks: Task[]) => {
-            // return a copy of the original array, this way nobody can modify the array outside of the service.
-            this.taskSubject.next(tasks.slice());
-          });
+          this.getTasks();
+          // TODO - turn this into constants
+          this.taskState.next('initialized');
         }
       }
     });
   }
 
+  /**
+   * Creates the firebase query, and in the process applies any filters requested
+   * @param filters Filters to apply
+   */
+  getTasks(filters?: Filter[]): void {
+    const uid = this.auth.getUID();
+
+    this.taskCollection = this.afs.collection<Task>(
+      `users/${uid}/todo`,
+      (ref: Query) => {
+        let q = ref;
+        // TODO: this is a hack because I know I only have 2 filters that when combined will both cancel each
+        // other out.
+        if (filters && filters.length === 1) {
+          q = q.where(
+            filters[0].dbField,
+            filters[0].dbOperation,
+            filters[0].dbValue
+          );
+        }
+        q = q.orderBy('date');
+        return q;
+      }
+    );
+    this.taskItems = this.taskCollection.valueChanges({ idField: 'id' });
+    this.taskState.next('update');
+  }
+
   ngOnDestroy(): void {
     this.closeTask();
-    if (this.taskSub) {
-      this.taskSub.unsubscribe();
-      this.taskSub = null;
-      this.taskItems = null;
-      this.taskCollection = null;
-    }
+    this.taskState.next('destroyed');
+    this.taskState.complete();
+    this.taskState = null;
+    this.taskItems = null;
+    this.taskCollection = null;
   }
 
   /**
@@ -66,7 +95,7 @@ export class TaskService implements OnDestroy {
     const task = {
       name: taskName,
       date: firebase.firestore.Timestamp.now(),
-      complete: false,
+      complete: false
     };
     this.taskCollection.add(task);
   }
@@ -105,7 +134,7 @@ export class TaskService implements OnDestroy {
     const subtask = {
       name: subtaskName,
       date: firebase.firestore.Timestamp.now(),
-      complete: false,
+      complete: false
     };
     this.subtaskCollection.add(subtask);
   }
@@ -128,11 +157,11 @@ export class TaskService implements OnDestroy {
     // need to update all subtasks - this task may not be 'opened', which means the subtask collection is not valid to use
     const subtaskCollection = this.taskCollection
       .doc(taskId)
-      .collection<Task>('subtask', ref => ref.orderBy('date'));
+      .collection<Task>('subtask', (ref) => ref.orderBy('date'));
     subtaskCollection.get().subscribe((query: QuerySnapshot<Task>) => {
       query.forEach((doc) => {
         doc.ref.update({
-          complete,
+          complete
         });
       });
     });

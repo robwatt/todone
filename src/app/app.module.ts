@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -33,6 +35,7 @@ import { TaskComponent } from './task/task.component';
 import { AddTaskFieldComponent } from './todo/add-task-field/add-task-field.component';
 import { DetailsComponent } from './todo/details/details.component';
 import { EditContentComponent } from './todo/edit-content/edit-content.component';
+import { FilterComponent } from './todo/filter/filter.component';
 import { TaskListComponent } from './todo/task-list/task-list.component';
 import { TodoComponent } from './todo/todo.component';
 
@@ -49,7 +52,8 @@ import { TodoComponent } from './todo/todo.component';
     TaskComponent,
     EditContentComponent,
     AddTaskFieldComponent,
-    TaskListComponent
+    TaskListComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,
@@ -95,7 +99,9 @@ import { TodoComponent } from './todo/todo.component';
     MatSnackBarModule,
     MatDialogModule,
     MatExpansionModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

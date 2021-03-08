@@ -1,5 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Filter } from 'src/app/models/filter';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -8,24 +16,48 @@ import { TaskService } from 'src/app/services/task.service';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
-export class TaskListComponent implements OnInit, OnDestroy {
+export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() filters: Filter[];
+
   tasks: Task[] = [];
   selectedTask: Task[] = [];
 
   private taskSub: Subscription;
 
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {
-    this.taskSub = this.taskService.taskSubject.subscribe((tasks: Task[]) => {
-      this.tasks = tasks;
-    });
+    this.initTaskSubscription();
   }
 
   ngOnDestroy(): void {
     if (this.taskSub) {
       this.taskSub.unsubscribe();
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.taskService.getTasks(this.filters);
+  }
+
+  private initTaskSubscription(): void {
+    if (this.taskSub) {
+      this.taskSub.unsubscribe();
+    }
+    this.taskService.taskState.subscribe((state: string) => {
+      if (state === 'initialized') {
+        this.taskSub = this.taskService.taskItems.subscribe((tasks: Task[]) => {
+          this.tasks = tasks;
+        });
+      } else if (state.startsWith('update')) {
+        if (this.taskSub) {
+          this.taskSub.unsubscribe();
+        }
+        this.taskSub = this.taskService.taskItems.subscribe((tasks: Task[]) => {
+          this.tasks = tasks;
+        });
+      }
+    });
   }
 
   /**
