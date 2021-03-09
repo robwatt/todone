@@ -21,7 +21,8 @@ const routes: Routes = [
     canActivate: [LoggedInGuard],
     children: [
       { path: '', redirectTo: 'todo', pathMatch: 'full' },
-      { path: 'todo', component: TodoComponent }
+      { path: 'todo', component: TodoComponent, data: {todoType: 'work'} },
+      { path: 'todo-personal', component: TodoComponent, data: {todoType: 'personal'} }
     ]
   },
   {

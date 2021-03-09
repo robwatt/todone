@@ -6,6 +6,7 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Filter } from 'src/app/models/filter';
 import { Task } from 'src/app/models/task';
@@ -24,7 +25,17 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   private taskSub: Subscription;
 
-  constructor(private taskService: TaskService) {}
+  // default value, can be changed
+  private todoType = 'work';
+
+  constructor(private taskService: TaskService, private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.data.subscribe((value) => {
+      if (value.todoType) {
+        this.todoType = value.todoType;
+        this.taskService.taskType = this.todoType;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.initTaskSubscription();
