@@ -9,13 +9,21 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list color="primary">
+      <div mat-subheader>Todo</div>
       <mat-list-item>
         <button mat-icon-button>
-          <mat-icon>check_circle_outline</mat-icon>
+          <mat-icon>task_alt</mat-icon>
         </button>
-        <a mat-list-item href="#">Todo</a>
+        <a mat-list-item href="/dashboard/todo-personal">Personal</a>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-icon-button>
+          <mat-icon>task_alt</mat-icon>
+        </button>
+        <a mat-list-item href="#">Work</a>
       </mat-list-item>
 
+      <div mat-subheader>Stories</div>
       <mat-list-item>
         <button mat-icon-button>
           <mat-icon>book</mat-icon>
@@ -23,6 +31,7 @@
         <a mat-list-item href="#">Stories</a>
       </mat-list-item>
 
+      <div mat-subheader>Retrospectives</div>
       <mat-list-item>
         <button mat-icon-button>
           <mat-icon>manage_accounts</mat-icon>
@@ -33,17 +42,6 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <app-header></app-header>
-    <!-- <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span>fire-dashboard-template</span>
-    </mat-toolbar> -->
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

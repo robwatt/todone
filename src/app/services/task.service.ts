@@ -29,6 +29,9 @@ export class TaskService implements OnDestroy {
 
   taskObservable: Observable<Task[]>;
 
+  // default task type incase one isn't provided
+  _taskType = 'work';
+
   constructor(
     private afs: AngularFirestore,
     private auth: AuthenticationService
@@ -49,6 +52,10 @@ export class TaskService implements OnDestroy {
     });
   }
 
+  set taskType(type: string) {
+    this._taskType = type;
+  }
+
   /**
    * Creates the firebase query, and in the process applies any filters requested
    * @param filters Filters to apply
@@ -57,7 +64,7 @@ export class TaskService implements OnDestroy {
     const uid = this.auth.getUID();
 
     this.taskCollection = this.afs.collection<Task>(
-      `users/${uid}/todo`,
+      `users/${uid}/todo-${this._taskType}`,
       (ref: Query) => {
         let q = ref;
         // TODO: this is a hack because I know I only have 2 filters that when combined will both cancel each
