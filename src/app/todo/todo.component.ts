@@ -1,5 +1,16 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+
+interface TodoInterface {
+  routeParam: string;
+  title: string;
+}
+
+const todo: TodoInterface[] = [
+  { routeParam: 'work', title: 'Work' },
+  { routeParam: 'personal', title: 'Personal' }
+];
 
 @Component({
   selector: 'app-todo',
@@ -8,8 +19,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TodoComponent {
   appliedFilterEvent: Event;
+  title: string;
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private activatedRoute: ActivatedRoute, private snackBar: MatSnackBar) {
+    this.activatedRoute.data.subscribe((value) => {
+      if (value.todoType) {
+        const todoValue: TodoInterface = todo.find(v => v.routeParam === value.todoType);
+        if (todoValue) {
+          this.title = todoValue.title;
+        }
+      }
+    });
+  }
 
   /**
    * Called once a task has been added successfully

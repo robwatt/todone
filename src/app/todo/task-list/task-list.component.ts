@@ -28,7 +28,10 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   // default value, can be changed
   private todoType = 'work';
 
-  constructor(private taskService: TaskService, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private taskService: TaskService,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.activatedRoute.data.subscribe((value) => {
       if (value.todoType) {
         this.todoType = value.todoType;
