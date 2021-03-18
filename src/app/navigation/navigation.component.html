@@ -8,37 +8,7 @@
     [opened]="(isHandset$ | async) === false"
   >
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list color="primary">
-      <div mat-subheader>Todo</div>
-      <mat-list-item>
-        <button mat-icon-button>
-          <mat-icon>task_alt</mat-icon>
-        </button>
-        <a mat-list-item href="/dashboard/todo-personal">Personal</a>
-      </mat-list-item>
-      <mat-list-item>
-        <button mat-icon-button>
-          <mat-icon>task_alt</mat-icon>
-        </button>
-        <a mat-list-item href="#">Work</a>
-      </mat-list-item>
-
-      <div mat-subheader>Stories</div>
-      <mat-list-item>
-        <button mat-icon-button>
-          <mat-icon>book</mat-icon>
-        </button>
-        <a mat-list-item href="#">Stories</a>
-      </mat-list-item>
-
-      <div mat-subheader>Retrospectives</div>
-      <mat-list-item>
-        <button mat-icon-button>
-          <mat-icon>manage_accounts</mat-icon>
-        </button>
-        <a mat-list-item href="#">Retrospectives</a>
-      </mat-list-item>
-    </mat-nav-list>
+    <app-nav-menu></app-nav-menu>
   </mat-sidenav>
   <mat-sidenav-content>
     <app-header></app-header>
