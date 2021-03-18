@@ -19,6 +19,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTreeModule } from '@angular/material/tree';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LuxonModule } from 'luxon-angular';
@@ -29,6 +30,7 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
+import { NavMenuComponent } from './navigation/nav-menu/nav-menu.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { RegisterComponent } from './register/register.component';
 import { TaskComponent } from './task/task.component';
@@ -53,7 +55,8 @@ import { TodoComponent } from './todo/todo.component';
     EditContentComponent,
     AddTaskFieldComponent,
     TaskListComponent,
-    FilterComponent
+    FilterComponent,
+    NavMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -101,7 +104,8 @@ import { TodoComponent } from './todo/todo.component';
     MatExpansionModule,
     MatTabsModule,
     MatSelectModule,
-    MatChipsModule
+    MatChipsModule,
+    MatTreeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
