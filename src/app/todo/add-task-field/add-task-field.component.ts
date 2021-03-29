@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { isNil } from 'lodash';
 import { TaskService } from 'src/app/services/task.service';
+import { Task2Service } from 'src/app/services/task2.service';
 
 @Component({
   selector: 'app-add-task-field',
@@ -11,7 +12,7 @@ import { TaskService } from 'src/app/services/task.service';
 export class AddTaskFieldComponent implements OnInit {
   @Output() taskAdded = new EventEmitter();
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: Task2Service) {}
 
   ngOnInit(): void {}
 

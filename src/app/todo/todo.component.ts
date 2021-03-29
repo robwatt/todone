@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { TaskService } from '../services/task.service';
+import { Task2Service } from '../services/task2.service';
 
 interface TodoInterface {
   routeParam: string;
@@ -20,8 +23,9 @@ const todo: TodoInterface[] = [
 export class TodoComponent {
   appliedFilterEvent: Event;
   title: string;
+  length = 0;
 
-  constructor(private activatedRoute: ActivatedRoute, private snackBar: MatSnackBar) {
+  constructor(private activatedRoute: ActivatedRoute, private snackBar: MatSnackBar, private taskService: Task2Service) {
     this.activatedRoute.data.subscribe((value) => {
       if (value.todoType) {
         const todoValue: TodoInterface = todo.find(v => v.routeParam === value.todoType);

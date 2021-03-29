@@ -6,11 +6,14 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Filter } from 'src/app/models/filter';
+import { Page } from 'src/app/models/page';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
+import { Task2Service } from 'src/app/services/task2.service';
 
 @Component({
   selector: 'app-task-list',
@@ -20,6 +23,7 @@ import { TaskService } from 'src/app/services/task.service';
 export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() filters: Filter[];
 
+  totalLength: number;
   tasks: Task[] = [];
   selectedTask: Task[] = [];
 
@@ -30,12 +34,13 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private taskService: TaskService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private task2Service: Task2Service
   ) {
     this.activatedRoute.data.subscribe((value) => {
       if (value.todoType) {
         this.todoType = value.todoType;
-        this.taskService.taskType = this.todoType;
+        this.task2Service.taskType = this.todoType;
       }
     });
   }
@@ -50,28 +55,24 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.taskService.getTasks(this.filters);
+  ngOnChanges(): void {
+    this.task2Service.getTasks(this.filters);
   }
 
-  private initTaskSubscription(): void {
-    if (this.taskSub) {
-      this.taskSub.unsubscribe();
+  /**
+   * Event called when the paginator is updated, we will request a new page of data to display
+   * @param pageEvent PageEvent
+   */
+  pageEvent(pageEvent: PageEvent): void {
+    const pageIndex = pageEvent.pageIndex;
+    const prevPageIndex = pageEvent.previousPageIndex;
+    if (pageIndex > prevPageIndex) {
+      this.task2Service.nextPage();
+    } else if (pageIndex < prevPageIndex) {
+      this.task2Service.prevPage();
+    } else {
+      // test if the page size has changed
     }
-    this.taskService.taskState.subscribe((state: string) => {
-      if (state === 'initialized') {
-        this.taskSub = this.taskService.taskItems.subscribe((tasks: Task[]) => {
-          this.tasks = tasks;
-        });
-      } else if (state.startsWith('update')) {
-        if (this.taskSub) {
-          this.taskSub.unsubscribe();
-        }
-        this.taskSub = this.taskService.taskItems.subscribe((tasks: Task[]) => {
-          this.tasks = tasks;
-        });
-      }
-    });
   }
 
   /**
@@ -108,5 +109,36 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedTask = [];
     }
     this.taskService.removeTask(taskId);
+  }
+
+  private initTaskSubscription(): void {
+    if (this.taskSub) {
+      this.taskSub.unsubscribe();
+    }
+    this.task2Service.taskState.subscribe((state: string) => {
+      console.log('state change', state);
+      if (state === 'initialized') {
+        this.taskSub = this.task2Service.taskItems.subscribe(
+          (page: Page<Task>) => {
+            if (page) {
+              this.tasks = page.data;
+              this.totalLength = page.total;
+            }
+          }
+        );
+      } else if (state.startsWith('update')) {
+        if (this.taskSub) {
+          this.taskSub.unsubscribe();
+        }
+        this.taskSub = this.task2Service.taskItems.subscribe(
+          (page: Page<Task>) => {
+            if (page) {
+              this.tasks = page.data;
+              this.totalLength = page.total;
+            }
+          }
+        );
+      }
+    });
   }
 }
