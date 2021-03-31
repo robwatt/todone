@@ -1,10 +1,12 @@
+import { isNgTemplate } from '@angular/compiler';
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument,
   DocumentChangeAction,
-  Query
+  Query,
+  QuerySnapshot
 } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { cloneDeep } from 'lodash';
@@ -26,6 +28,8 @@ export class Task2Service implements OnDestroy {
   private stats: TodoStats;
 
   private taskCollection: AngularFirestoreCollection<Task>;
+  private subtaskCollection: AngularFirestoreCollection<Task>;
+
   private statsDoc: AngularFirestoreDocument<TodoStats>;
 
   private filters: Filter[];
@@ -116,10 +120,12 @@ export class Task2Service implements OnDestroy {
         this.firstInResponse = actions[0].payload.doc.data();
         this.lastInResponse = actions[actions.length - 1].payload.doc.data();
 
-        this.tableData = [];
-        for (const item of actions) {
-          this.tableData.push(item.payload.doc.data());
-        }
+        // map the data returned from the snaptshot, set the ID and gather in an array
+        this.tableData = actions.map((item) => {
+          const task = item.payload.doc.data();
+          task.id = item.payload.doc.id;
+          return task;
+        });
 
         // create page to send back
         const page: Page<Task> = {
@@ -167,10 +173,12 @@ export class Task2Service implements OnDestroy {
         this.firstInResponse = response.docs[0].data();
         this.lastInResponse = response.docs[response.docs.length - 1].data();
 
-        this.tableData = [];
-        for (const item of response.docs) {
-          this.tableData.push(item.data());
-        }
+        // map the data returned from the snaptshot, set the ID and gather in an array
+        this.tableData = response.docs.map((item) => {
+          const task = item.data();
+          task.id = item.id;
+          return task;
+        });
 
         // create page to send back
         const page: Page<Task> = {
@@ -210,10 +218,12 @@ export class Task2Service implements OnDestroy {
         this.firstInResponse = response.docs[0].data();
         this.lastInResponse = response.docs[response.docs.length - 1].data();
 
-        this.tableData = [];
-        for (const item of response.docs) {
-          this.tableData.push(item.data());
-        }
+        // map the data returned from the snaptshot, set the ID and gather in an array
+        this.tableData = response.docs.map((item) => {
+          const task = item.data();
+          task.id = item.id;
+          return task;
+        });
 
         this.popPrevStartAt(this.firstInResponse);
 
@@ -253,6 +263,79 @@ export class Task2Service implements OnDestroy {
     batch.commit();
 
     this.getTasks(this.filters);
+  }
+
+  /**
+   * Updates the parent task with the new provided data.
+   * @param taskId Parent task IDs
+   * @param newData New data to update the task with (this is partial data)
+   */
+   updateTask(taskId: string, newData: any): void {
+    this.taskCollection.doc(taskId).update(newData);
+
+    // refresh the list
+    this.getTasks(this.filters);
+  }
+
+  /**
+   * Removes the specified task from the service
+   * @param taskId TaskID to remove
+   */
+  removeTask(taskId: string): void {
+    // create a batch update that will add the new task as well as update the count
+    const batch = this.afs.firestore.batch();
+    const uid = this.auth.getUID();
+
+    // need a reference to the document that is to be deleted
+    const ref = this.afs
+      .collection<Task>(`users/${uid}/todo-${this._taskType}`)
+      .doc(taskId).ref;
+    batch.delete(ref);
+
+    // update the stats
+    const statUpdate = cloneDeep(this.stats);
+    // decrease the total count of this taskType by 1
+    statUpdate.count[this._taskType] = this.stats.count[this._taskType] - 1;
+    batch.update(this.statsDoc.ref, statUpdate);
+
+    batch.commit();
+
+    // refresh the list
+    this.getTasks(this.filters);
+  }
+
+  /**
+   * This will mark a task complete/not complete, including any subtasks.  This will mark all subtasks the same as the parent
+   * @param taskId Task ID to mark complete/not complete.
+   * @param complete True if the task is complete, false if the task should be marked not complete
+   */
+  taskComplete(taskId: string, complete: boolean): void {
+    this.taskCollection.doc(taskId).update({ complete });
+    // need to update all subtasks - this task may not be 'opened', which means the subtask collection is not valid to use
+    const subtaskCollection = this.taskCollection
+      .doc(taskId)
+      .collection<Task>('subtask', (ref) => ref.orderBy('date'));
+    subtaskCollection.get().subscribe((query: QuerySnapshot<Task>) => {
+      query.forEach((doc) => {
+        doc.ref.update({
+          complete
+        });
+      });
+    });
+
+    // TODO: refresh the current page
+    this.getTasks(this.filters);
+  }
+
+  /**
+   * Removes a subtask from the currently 'opened' task
+   * @param subtaskId Id of the subtask to remove
+   */
+   removeSubTask(subtaskId: string): void {
+    this.subtaskCollection.doc(subtaskId).delete();
+
+    // TODO: refresh the current page
+    // this.getTasks(this.filters);
   }
 
   /**

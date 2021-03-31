@@ -88,7 +88,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * @param taskId Task ID to mark as completed
    */
   complete(taskId: string): void {
-    this.taskService.taskComplete(taskId, true);
+    this.task2Service.taskComplete(taskId, true);
   }
 
   /**
@@ -96,7 +96,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * @param taskId Task ID to mark as not completed
    */
   uncomplete(taskId: string): void {
-    this.taskService.taskComplete(taskId, false);
+    this.task2Service.taskComplete(taskId, false);
   }
 
   /**
@@ -108,7 +108,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.selectedTask[0] && taskId === this.selectedTask[0].id) {
       this.selectedTask = [];
     }
-    this.taskService.removeTask(taskId);
+    this.task2Service.removeTask(taskId);
   }
 
   private initTaskSubscription(): void {
