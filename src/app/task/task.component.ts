@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DateTime } from 'luxon';
 import { Task } from '../models/task';
 import { TaskService } from '../services/task.service';
-import { Task2Service } from '../services/task2.service';
 import { EditContentComponent } from '../todo/edit-content/edit-content.component';
 
 export interface EditDialogData {
@@ -25,7 +24,7 @@ export class TaskComponent implements OnInit {
 
   showMenu = false;
 
-  constructor(private dialog: MatDialog, private taskService: TaskService, private task2Service: Task2Service) {}
+  constructor(private dialog: MatDialog, private taskService: TaskService) {}
 
   ngOnInit(): void {}
 
@@ -47,7 +46,7 @@ export class TaskComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       // need to update the tasks name
       if (this.level === 0) {
-        this.task2Service.updateTask(this.task.id, { name: result });
+        this.taskService.updateTask(this.task.id, { name: result });
       } else {
         this.taskService.updateSubtask(this.task.id, { name: result });
       }

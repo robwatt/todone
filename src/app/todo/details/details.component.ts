@@ -23,7 +23,7 @@ export class DetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.taskService.subtaskSubject.subscribe((subtasks: Task[]) => {
+    this.taskService.subtaskItems.subscribe((subtasks: Task[]) => {
       this.subtasks = subtasks;
     });
   }

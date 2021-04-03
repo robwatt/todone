@@ -3,8 +3,7 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
-  SimpleChanges
+  OnInit
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
@@ -13,7 +12,6 @@ import { Filter } from 'src/app/models/filter';
 import { Page } from 'src/app/models/page';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
-import { Task2Service } from 'src/app/services/task2.service';
 
 @Component({
   selector: 'app-task-list',
@@ -33,14 +31,13 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   private todoType = 'work';
 
   constructor(
-    private taskService: TaskService,
     private activatedRoute: ActivatedRoute,
-    private task2Service: Task2Service
+    private taskService: TaskService
   ) {
     this.activatedRoute.data.subscribe((value) => {
       if (value.todoType) {
         this.todoType = value.todoType;
-        this.task2Service.taskType = this.todoType;
+        this.taskService.taskType = this.todoType;
       }
     });
   }
@@ -56,7 +53,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(): void {
-    this.task2Service.getTasks(this.filters);
+    this.taskService.getTasks(this.filters);
   }
 
   /**
@@ -67,9 +64,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     const pageIndex = pageEvent.pageIndex;
     const prevPageIndex = pageEvent.previousPageIndex;
     if (pageIndex > prevPageIndex) {
-      this.task2Service.nextPage();
+      this.taskService.nextPage();
     } else if (pageIndex < prevPageIndex) {
-      this.task2Service.prevPage();
+      this.taskService.prevPage();
     } else {
       // test if the page size has changed
     }
@@ -88,7 +85,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * @param taskId Task ID to mark as completed
    */
   complete(taskId: string): void {
-    this.task2Service.taskComplete(taskId, true);
+    this.taskService.taskComplete(taskId, true);
   }
 
   /**
@@ -96,7 +93,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * @param taskId Task ID to mark as not completed
    */
   uncomplete(taskId: string): void {
-    this.task2Service.taskComplete(taskId, false);
+    this.taskService.taskComplete(taskId, false);
   }
 
   /**
@@ -108,17 +105,17 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.selectedTask[0] && taskId === this.selectedTask[0].id) {
       this.selectedTask = [];
     }
-    this.task2Service.removeTask(taskId);
+    this.taskService.removeTask(taskId);
   }
 
   private initTaskSubscription(): void {
     if (this.taskSub) {
       this.taskSub.unsubscribe();
     }
-    this.task2Service.taskState.subscribe((state: string) => {
+    this.taskService.taskState.subscribe((state: string) => {
       console.log('state change', state);
       if (state === 'initialized') {
-        this.taskSub = this.task2Service.taskItems.subscribe(
+        this.taskSub = this.taskService.taskItems.subscribe(
           (page: Page<Task>) => {
             if (page) {
               this.tasks = page.data;
@@ -130,7 +127,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
         if (this.taskSub) {
           this.taskSub.unsubscribe();
         }
-        this.taskSub = this.task2Service.taskItems.subscribe(
+        this.taskSub = this.taskService.taskItems.subscribe(
           (page: Page<Task>) => {
             if (page) {
               this.tasks = page.data;
