@@ -1,29 +1,29 @@
 <div fxLayout="row" fxLayoutAlign="space-between" class="task">
-  <div fxLayout="column" fxFlex>
-    <div>
-      <mat-action-list fxFlex>
-        <app-task
-          *ngFor="let task of tasks"
-          [task]="task"
-          (openTask)="openTask($event)"
-          (deleteTask)="delete($event)"
-          (completeTask)="complete($event)"
-          (uncompleteTask)="uncomplete($event)"
-        >
-        </app-task>
-      </mat-action-list>
-    </div>
-    <div>
-      <mat-paginator
-        [length]="totalLength"
-        [pageSize]="10"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        (page)="pageEvent($event)"
-      >
-      </mat-paginator>
-    </div>
-  </div>
+  <mat-action-list fxFlex>
+    <app-task
+      *ngFor="let task of tasks"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+  </mat-action-list>
   <div class="task-details" *ngIf="selectedTask.length > 0" fxFlex="50">
     <app-details [task]="selectedTask[0]"></app-details>
   </div>
 </div>
+
+<!-- sub headings
+  today
+  yesterday
+  this week
+  last week
+  this month
+  last month
+  quarter
+  last quarter
+  last year
+  older
+ -->

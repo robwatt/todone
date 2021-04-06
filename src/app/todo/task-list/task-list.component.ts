@@ -57,22 +57,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
-   * Event called when the paginator is updated, we will request a new page of data to display
-   * @param pageEvent PageEvent
-   */
-  pageEvent(pageEvent: PageEvent): void {
-    const pageIndex = pageEvent.pageIndex;
-    const prevPageIndex = pageEvent.previousPageIndex;
-    if (pageIndex > prevPageIndex) {
-      this.taskService.nextPage();
-    } else if (pageIndex < prevPageIndex) {
-      this.taskService.prevPage();
-    } else {
-      // test if the page size has changed
-    }
-  }
-
-  /**
    * Opens the task to see more information, such as sub items
    */
   openTask(task: Task): void {
