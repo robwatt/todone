@@ -1,16 +1,107 @@
 <div fxLayout="row" fxLayoutAlign="space-between" class="task">
-    <mat-action-list fxFlex>
-      <app-task
-        *ngFor="let task of tasks"
-        [task]="task"
-        (openTask)="openTask($event)"
-        (deleteTask)="delete($event)"
-        (completeTask)="complete($event)"
-        (uncompleteTask)="uncomplete($event)"
-      >
-      </app-task>
-    </mat-action-list>
-    <div class="task-details" *ngIf="selectedTask.length > 0" fxFlex="50">
-      <app-details [level]="1" [task]="selectedTask[0]"></app-details>
-    </div>
+  <mat-action-list fxFlex>
+    <div mat-subheader *ngIf="groupedTasks.today">Today</div>
+    <app-task
+      *ngFor="let task of groupedTasks.today"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.yesterday">Yesterday</div>
+    <app-task
+      *ngFor="let task of groupedTasks.yesterday"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.thisWeek">This Week</div>
+    <app-task
+      *ngFor="let task of groupedTasks.thisWeek"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.lastWeek">Last Week</div>
+    <app-task
+      *ngFor="let task of groupedTasks.lastWeek"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.thisMonth">This Month</div>
+    <app-task
+      *ngFor="let task of groupedTasks.thisMonth"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.lastMonth">Last Month</div>
+    <app-task
+      *ngFor="let task of groupedTasks.lastMonth"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.quarter">Quarter</div>
+    <app-task
+      *ngFor="let task of groupedTasks.quarter"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.lastQuarter">Last Quarter</div>
+    <app-task
+      *ngFor="let task of groupedTasks.lastQuarter"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.thisYear">This Year</div>
+    <app-task
+      *ngFor="let task of groupedTasks.thisYear"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+    <div mat-subheader *ngIf="groupedTasks.older">Older</div>
+    <app-task
+      *ngFor="let task of groupedTasks.older"
+      [task]="task"
+      (openTask)="openTask($event)"
+      (deleteTask)="delete($event)"
+      (completeTask)="complete($event)"
+      (uncompleteTask)="uncomplete($event)"
+    >
+    </app-task>
+  </mat-action-list>
+  <div class="task-details" *ngIf="selectedTask" fxFlex="50">
+    <app-details [task]="selectedTask" (closeTask)="closeTask()"></app-details>
   </div>
+</div>

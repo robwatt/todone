@@ -20,6 +20,7 @@ const todo: TodoInterface[] = [
 export class TodoComponent {
   appliedFilterEvent: Event;
   title: string;
+  length = 0;
 
   constructor(private activatedRoute: ActivatedRoute, private snackBar: MatSnackBar) {
     this.activatedRoute.data.subscribe((value) => {

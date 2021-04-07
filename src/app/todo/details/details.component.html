@@ -1,30 +1,40 @@
-<h1>Task</h1>
-<p>{{ task.name }}</p>
 <div class="details">
-  <form #subTaskForm="ngForm" (ngSubmit)="addSubTask(subTaskForm)" novalidate>
-    <mat-form-field appearance="fill" class="add-subtask">
-      <mat-label>Add Sub-task</mat-label>
-      <input
-        matInput
-        placeholder="New sub-task"
-        id="subtask"
-        [(ngModel)]="subTaskName"
-        name="subtask"
-        required
-      />
-    </mat-form-field>
-  </form>
-  <div fxLayout="row" fxLayoutAlign="space-between">
-    <mat-action-list fxFlex>
-      <app-task
-        *ngFor="let subtask of subtasks"
-        [task]="subtask"
-        [level]="1"
-        (deleteTask)="delete($event)"
-        (completeTask)="complete($event)"
-        (uncompleteTask)="uncomplete($event)"
-      >
-      </app-task>
-    </mat-action-list>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-toolbar>
+      <span>Task</span>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+  <p class="details--title">{{ task.name }}</p>
+  <div class="details--content">
+    <form #subTaskForm="ngForm" (ngSubmit)="addSubTask(subTaskForm)" novalidate>
+      <mat-form-field appearance="fill" class="add-subtask">
+        <mat-label>Add Sub-task</mat-label>
+        <input
+          matInput
+          placeholder="New sub-task"
+          id="subtask"
+          [(ngModel)]="subTaskName"
+          name="subtask"
+          required
+        />
+      </mat-form-field>
+    </form>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-action-list fxFlex>
+        <app-task
+          *ngFor="let subtask of subtasks"
+          [task]="subtask"
+          [level]="1"
+          (deleteTask)="delete($event)"
+          (completeTask)="complete($event)"
+          (uncompleteTask)="uncomplete($event)"
+        >
+        </app-task>
+      </mat-action-list>
+    </div>
   </div>
 </div>

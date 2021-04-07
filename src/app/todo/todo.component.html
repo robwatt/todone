@@ -1,7 +1,9 @@
 <div class="dashboard">
-  <h2>{{title}}</h2>
+  <h2>{{ title }}</h2>
   <app-filter (appliedFilters)="appliedFiltersChanged($event)"></app-filter>
   <app-add-task-field (taskAdded)="taskAdded()"></app-add-task-field>
   <br />
-  <app-task-list [filters]="appliedFilterEvent"></app-task-list>
+  <app-task-list
+    [filters]="appliedFilterEvent"
+  ></app-task-list>
 </div>
