@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Task } from 'src/app/models/task';
@@ -7,12 +7,13 @@ import { TaskService } from 'src/app/services/task.service';
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
-  styleUrls: ['./details.component.scss'],
+  styleUrls: ['./details.component.scss']
 })
 export class DetailsComponent implements OnInit {
   // this is the parent task - used to show the task name
   // may replace this at a later date when I have a better UX
   @Input() task: Task;
+  @Output() closeTask: EventEmitter<any> = new EventEmitter();
 
   subtasks: Task[];
   subTaskName: string;
@@ -31,7 +32,7 @@ export class DetailsComponent implements OnInit {
   addSubTask(form: NgForm): void {
     this.taskService.addSubTask(this.subTaskName);
     this.snackBar.open('Sub-task added', 'Dismiss', {
-      duration: 3000,
+      duration: 3000
     });
     form.reset();
   }
@@ -54,5 +55,12 @@ export class DetailsComponent implements OnInit {
 
   delete(subtaskId: string): void {
     this.taskService.removeSubTask(subtaskId);
+  }
+
+  /**
+   * This will emit to listeners that the user has pressed the close button
+   */
+  close(): void {
+    this.closeTask.emit('');
   }
 }

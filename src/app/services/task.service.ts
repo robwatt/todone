@@ -7,6 +7,7 @@ import {
   QuerySnapshot
 } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
+import { filter } from 'lodash';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Filter } from '../models/filter';
 import { Page } from '../models/page';
@@ -19,6 +20,7 @@ import { AuthenticationService } from './authentication.service';
 export class TaskService implements OnDestroy {
   // maintains the state of the service
   taskState: Subject<string>;
+  // TODO: change the type from Page to just Task[]
   taskItems: Subject<Page<Task>>;
 
   private taskCollection: AngularFirestoreCollection<Task>;
@@ -30,9 +32,7 @@ export class TaskService implements OnDestroy {
 
   // default task type incase one isn't provided
   private _taskType = 'work';
-
   private filters: Filter[];
-
   private tableData: Task[];
 
   constructor(
@@ -46,7 +46,9 @@ export class TaskService implements OnDestroy {
       if (result) {
         const uid = this.auth.getUID();
         if (uid) {
-          // this.initializeCollections();
+          // this value needs to be initialized at the beginning and only destroyed when we close the
+          // task, or destroy the service
+          this.subtaskItems = new BehaviorSubject<Task[]>(null);
           this.getTasks();
           // TODO - turn this into constants
           this.taskState.next('initialized');
@@ -68,8 +70,6 @@ export class TaskService implements OnDestroy {
    */
   set taskType(type: string) {
     this._taskType = type;
-    // reset the collections because the task type has changed and this directly impacts the collection we are using.
-    // this.initializeCollections();
   }
 
   /**
@@ -77,22 +77,10 @@ export class TaskService implements OnDestroy {
    * @param filters Filters used to reduce the returned data set
    */
   getTasks(filters?: Filter[]): void {
-    const uid = this.auth.getUID();
     this.filters = filters;
 
-    this.afs
-      .collection<Task>(`users/${uid}/todo-${this._taskType}`, (ref: Query) => {
-        let q = ref;
-        if (filters && filters.length === 1) {
-          q = q.where(
-            filters[0].dbField,
-            filters[0].dbOperation,
-            filters[0].dbValue
-          );
-        }
-        q = q.orderBy('date', 'desc');
-        return q;
-      })
+    this.createCollection();
+    this.taskCollection
       .snapshotChanges()
       .subscribe((actions: DocumentChangeAction<Task>[]) => {
         // create page to send back
@@ -191,8 +179,6 @@ export class TaskService implements OnDestroy {
    */
   openTask(taskId: string): void {
     // if we are adding a subtask, then this task is in view
-    this.closeTask();
-
     this.subtaskCollection = this.taskCollection
       .doc(taskId)
       .collection('subtask', (ref: Query) => ref.orderBy('date'));
@@ -244,12 +230,36 @@ export class TaskService implements OnDestroy {
   /**
    * Clears any open subtask collection being listened to
    */
-  private closeTask(): void {
+  closeTask(): void {
     if (this.subtaskItems) {
       this.subtaskSubscription.unsubscribe();
       this.subtaskItems.unsubscribe();
       this.subtaskItems = null;
       this.subtaskCollection = null;
     }
+  }
+
+  /**
+   * Creates the collection that is used for CRUD operations
+   * @param filters Possible list of filters to apply.
+   */
+  private createCollection(): void {
+    const uid = this.auth.getUID();
+    const filters = this.filters;
+    this.taskCollection = this.afs.collection<Task>(
+      `users/${uid}/todo-${this._taskType}`,
+      (ref: Query) => {
+        let q = ref;
+        if (filters && filters.length === 1) {
+          q = q.where(
+            filters[0].dbField,
+            filters[0].dbOperation,
+            filters[0].dbValue
+          );
+        }
+        q = q.orderBy('date', 'desc');
+        return q;
+      }
+    );
   }
 }
