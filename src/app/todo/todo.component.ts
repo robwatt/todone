@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Filter } from '../models/filter';
 import { PreferencesService } from '../services/preferences.service';
 
@@ -23,6 +24,8 @@ export class TodoComponent implements OnInit, OnDestroy {
   title: string;
   taskFilters: Filter[];
 
+  private preferencesSubscription: Subscription;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
@@ -41,7 +44,7 @@ export class TodoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.preferencesService.taskPrefSubject.subscribe((preferences: any) => {
+    this.preferencesSubscription  = this.preferencesService.taskPrefSubject.subscribe((preferences: any) => {
       if (preferences) {
         this.taskFilters = preferences.filters;
       }
@@ -49,7 +52,9 @@ export class TodoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.preferencesService.taskPrefSubject.unsubscribe();
+    if (this.preferencesSubscription) {
+      this.preferencesSubscription.unsubscribe();
+    }
   }
 
   /**
