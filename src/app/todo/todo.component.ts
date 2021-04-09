@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Filter } from '../models/filter';
+import { PreferencesService } from '../services/preferences.service';
 
 interface TodoInterface {
   routeParam: string;
@@ -17,20 +19,37 @@ const todo: TodoInterface[] = [
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss']
 })
-export class TodoComponent {
-  appliedFilterEvent: Event;
+export class TodoComponent implements OnInit, OnDestroy {
   title: string;
-  length = 0;
+  taskFilters: Filter[];
 
-  constructor(private activatedRoute: ActivatedRoute, private snackBar: MatSnackBar) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar,
+    private preferencesService: PreferencesService
+  ) {
     this.activatedRoute.data.subscribe((value) => {
       if (value.todoType) {
-        const todoValue: TodoInterface = todo.find(v => v.routeParam === value.todoType);
+        const todoValue: TodoInterface = todo.find(
+          (v) => v.routeParam === value.todoType
+        );
         if (todoValue) {
           this.title = todoValue.title;
         }
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.preferencesService.taskPrefSubject.subscribe((preferences: any) => {
+      if (preferences) {
+        this.taskFilters = preferences.filters;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.preferencesService.taskPrefSubject.unsubscribe();
   }
 
   /**
@@ -42,7 +61,12 @@ export class TodoComponent {
     });
   }
 
+  /**
+   * Called when the user applies a task filter
+   * @param event Event with the filters the user applied
+   */
   appliedFiltersChanged(event: Event): void {
-    this.appliedFilterEvent = event;
+    this.preferencesService.updateTaskPreferences({ filters: event });
+    this.taskFilters = event as any;
   }
 }

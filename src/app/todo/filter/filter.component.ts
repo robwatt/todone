@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { Filter } from 'src/app/models/filter';
 
 @Component({
@@ -6,7 +6,8 @@ import { Filter } from 'src/app/models/filter';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss']
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnChanges {
+  @Input() filtersToApply: Filter[];
   @Output() appliedFilters = new EventEmitter<Filter[]>();
 
   availableFilters: Filter[] = [];
@@ -27,10 +28,13 @@ export class FilterComponent implements OnInit {
         dbValue: true
       }
     ];
-    console.log('available filters', this.availableFilters);
   }
 
-  ngOnInit(): void {}
+  ngOnChanges(): void {
+    if (this.filtersToApply) {
+      this.filterList = this.filtersToApply;
+    }
+  }
 
   /**
    * Adds the specific filter to the list, if it isn't already in the filter list.
