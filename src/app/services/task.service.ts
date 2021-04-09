@@ -7,7 +7,6 @@ import {
   QuerySnapshot
 } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { filter } from 'lodash';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Filter } from '../models/filter';
 import { Page } from '../models/page';
