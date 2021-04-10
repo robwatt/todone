@@ -23,6 +23,7 @@ export class TaskService implements OnDestroy {
   taskItems: Subject<Page<Task>>;
 
   private taskCollection: AngularFirestoreCollection<Task>;
+  private taskColSubscription: Subscription;
   private subtaskCollection: AngularFirestoreCollection<Task>;
 
   // subtask related fields
@@ -79,7 +80,7 @@ export class TaskService implements OnDestroy {
     this.filters = filters;
 
     this.createCollection();
-    this.taskCollection
+    this.taskColSubscription = this.taskCollection
       .snapshotChanges()
       .subscribe((actions: DocumentChangeAction<Task>[]) => {
         // create page to send back
@@ -243,6 +244,10 @@ export class TaskService implements OnDestroy {
    * @param filters Possible list of filters to apply.
    */
   private createCollection(): void {
+    // unsubscribe from collection subscription first
+    if (this.taskColSubscription) {
+      this.taskColSubscription.unsubscribe();
+    }
     const uid = this.auth.getUID();
     const filters = this.filters;
     this.taskCollection = this.afs.collection<Task>(

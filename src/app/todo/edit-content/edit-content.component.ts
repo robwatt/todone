@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EditDialogData } from 'src/app/task/task.component';
+import { EditDialogData } from '../task/task.component';
 
 @Component({
   selector: 'app-edit-content',
