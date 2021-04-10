@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DateTime } from 'luxon';
-import { Task } from '../models/task';
-import { TaskService } from '../services/task.service';
-import { EditContentComponent } from '../todo/edit-content/edit-content.component';
+import { Task } from 'src/app/models/task';
+import { TaskService } from 'src/app/services/task.service';
+import { EditContentComponent } from '../edit-content/edit-content.component';
 
 export interface EditDialogData {
   name: string;

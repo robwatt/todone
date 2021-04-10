@@ -43,7 +43,11 @@ export class NavMenuComponent implements OnInit {
     this.dataSource.data = TREE_DATA;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // default to opening the Todo tree node
+    const referenceToNode = TREE_DATA.filter((item) => item.name === 'Todo');
+    this.treeControl.expand(referenceToNode[0]);
+  }
 
   hasChild = (_: number, node: MenuNode) =>
     !!node.children && node.children.length > 0;
