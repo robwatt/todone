@@ -1,0 +1,23 @@
+<mat-toolbar>
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <button mat-button [matMenuTriggerFor]="menu">
+      {{ menuTitle }}<mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="createEpic()">Create Epic</button>
+      <mat-divider *ngIf="epics"></mat-divider>
+      <button *ngFor="let epic of epics" mat-menu-item (click)="openEpic(epic)">
+        {{ epic.title }}
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>
+<div class="epics">
+  <div class="epics-empty__parent" *ngIf="!selectedEpic">
+    <div class="epics-empty__child">Select an epic to view</div>
+  </div>
+  <div *ngIf="selectedEpic">
+    <app-epic-details [epic]="selectedEpic"></app-epic-details>
+    <app-stories [epic]="selectedEpic"></app-stories>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { isNil } from 'lodash';
+import { isEmpty } from 'lodash';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class AddTaskFieldComponent implements OnInit {
 
   addTask(taskForm: NgForm): void {
     const taskName = taskForm.value.task;
-    if (isNil(taskName)) {
+    if (isEmpty(taskName)) {
       taskForm.form.controls.task.setErrors({ invalid: true });
       // stop processing the form.
       return;

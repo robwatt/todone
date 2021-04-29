@@ -1,3 +1,5 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -25,10 +27,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LuxonModule } from 'luxon-angular';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+import { MarkdownModule } from 'ngx-markdown';
+import 'prismjs';
+import 'prismjs/components/prism-typescript.min.js';
+import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EpicDetailsComponent } from './epics/epic-details/epic-details.component';
+import { CreateEpicDialogComponent } from './epics/epic/create-epic-dialog/create-epic-dialog.component';
+import { EpicComponent } from './epics/epic/epic.component';
+import { StoriesComponent } from './epics/stories/stories.component';
+import { StoryDetailsComponent } from './epics/stories/story-details/story-details.component';
+import { StoryListComponent } from './epics/stories/story-list/story-list.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
 import { NavMenuComponent } from './navigation/nav-menu/nav-menu.component';
@@ -57,7 +70,13 @@ import { TodoComponent } from './todo/todo.component';
     AddTaskFieldComponent,
     TaskListComponent,
     FilterComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    EpicComponent,
+    CreateEpicDialogComponent,
+    EpicDetailsComponent,
+    StoriesComponent,
+    StoryDetailsComponent,
+    StoryListComponent
   ],
   imports: [
     BrowserModule,
@@ -107,7 +126,11 @@ import { TodoComponent } from './todo/todo.component';
     MatSelectModule,
     MatChipsModule,
     MatTreeModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MarkdownModule.forRoot(),
+    ClipboardModule,
+    MatGridListModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

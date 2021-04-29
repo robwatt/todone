@@ -1,11 +1,11 @@
 <h1 mat-dialog-title>Edit task</h1>
 <div mat-dialog-content>
-    <mat-form-field class="name">
-        <mat-label>Task name</mat-label>
-        <input matInput [(ngModel)]="data.name">
-    </mat-form-field>
+  <mat-form-field class="name">
+    <mat-label>Task name</mat-label>
+    <input matInput [(ngModel)]="data.name" />
+  </mat-form-field>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="cancel()">Cancel</button>
-    <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>Ok</button>
 </div>
