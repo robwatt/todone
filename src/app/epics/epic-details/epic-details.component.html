@@ -1,0 +1,40 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{ epic.title }}
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-form-field
+    *ngIf="editMode"
+    appearance="outline"
+    class="epic-description"
+  >
+    <mat-label>Epic description</mat-label>
+    <textarea
+      matInput
+      placeholder="Enter epic description"
+      rows="5"
+      [(ngModel)]="epic.description"
+    ></textarea>
+  </mat-form-field>
+  <markdown
+    *ngIf="epic.description && !editMode"
+    [data]="epic.description"
+  ></markdown>
+  <p *ngIf="!epic.description && !editMode">Enter epic description</p>
+  <mat-action-row>
+    <button *ngIf="!editMode" mat-icon-button (click)="editEpic()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button *ngIf="editMode" mat-icon-button (click)="saveEpic()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button *ngIf="editMode" mat-icon-button (click)="cancelEpicChanges()">
+      <mat-icon>delete
+      </mat-icon>
+    </button>
+    <button mat-icon-button [cdkCopyToClipboard]="epic.description">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  </mat-action-row>
+</mat-expansion-panel>

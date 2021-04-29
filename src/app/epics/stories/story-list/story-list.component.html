@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-subtitle>List of stories</mat-card-subtitle>
+  <mat-card-content>
+    <form #form="ngForm" (ngSubmit)="addStory(form)">
+      <mat-form-field class="story-form" appearance="outline">
+        <mat-label>Enter story</mat-label>
+        <input
+          matInput
+          placeholder="New story"
+          id="story"
+          ngModel
+          name="story"
+        />
+      </mat-form-field>
+    </form>
+    <div class="story-list" *ngIf="stories && stories.length > 0">
+      <mat-list cdkDropList (cdkDropListDropped)="drop($event)">
+        <mat-list-item *ngFor="let story of stories">{{story.title}}</mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>

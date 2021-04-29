@@ -1,0 +1,14 @@
+.epics {
+  padding: 20px;
+
+  &-empty {
+    &__parent {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &__child {
+      font-size: 1.2rem;
+    }
+  }
+}
