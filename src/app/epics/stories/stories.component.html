@@ -1,8 +1,8 @@
 <div class="stories" fxLayout="row" fxLayoutAlign="center stretch" fxLayoutGap="10px">
-  <div class="card">
-    <app-story-list [epic]="epic"></app-story-list>
+  <div [ngClass]="selectedStory ? 'card-50' : 'card-100'" class="card">
+    <app-story-list [epic]="epic" (selectedStory)="onSelectedStory($event)"></app-story-list>
   </div>
-  <div class="card">
-    <app-story-details></app-story-details>
+  <div *ngIf="selectedStory" class="card-50">
+    <app-story-details [story]="selectedStory"></app-story-details>
   </div>
 </div>
