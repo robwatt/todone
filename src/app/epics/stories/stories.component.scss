@@ -2,8 +2,12 @@
   margin-top: 10px;
 }
 
-.card {
-  // background: lightblue;
+.card-100 {
+  height: calc(100%);
+  width: calc(100%);
+}
+
+.card-50 {
   height: calc(100%);
   width: calc(50%);
 }

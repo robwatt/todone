@@ -13,4 +13,8 @@ export class CreateEpicDialogComponent {
   onCancel(): void {
     this.dialogRef.close();
   }
+
+  createEpic(): void {
+    this.dialogRef.close(this.title);
+  }
 }

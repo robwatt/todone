@@ -1,11 +1,15 @@
 <h1 mat-dialog-title>Create new epic</h1>
 <div mat-dialog-content>
-  <mat-form-field>
-    <mat-label>Title</mat-label>
-    <input matInput [(ngModel)]="title">
-  </mat-form-field>
+  <form (ngSubmit)="createEpic()">
+    <mat-form-field appearance="outline" class="epic-add">
+      <mat-label>Title</mat-label>
+      <input matInput [(ngModel)]="title" id="title" name="epicTitle" />
+    </mat-form-field>
+  </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button [matDialogClose]="title" cdkFocusInitial>Create</button>
+  <button mat-button color="primary" [matDialogClose]="title" cdkFocusInitial>
+    Create
+  </button>
 </div>

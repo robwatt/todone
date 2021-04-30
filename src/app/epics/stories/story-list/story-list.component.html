@@ -14,9 +14,20 @@
       </mat-form-field>
     </form>
     <div class="story-list" *ngIf="stories && stories.length > 0">
-      <mat-list cdkDropList (cdkDropListDropped)="drop($event)">
-        <mat-list-item *ngFor="let story of stories">{{story.title}}</mat-list-item>
-      </mat-list>
+      <mat-selection-list
+        cdkDropList
+        (cdkDropListDropped)="drop($event)"
+        [multiple]="false"
+        #storyList
+        (selectionChange)="selectionChanged($event)"
+      >
+        <mat-list-option
+          *ngFor="let story of stories"
+          cdkDrag
+          [value]="story"
+          >{{ story.title }}</mat-list-option
+        >
+      </mat-selection-list>
     </div>
   </mat-card-content>
 </mat-card>
