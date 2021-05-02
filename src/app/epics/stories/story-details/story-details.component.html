@@ -1,1 +1,58 @@
-<mat-card>{{story?.title}}</mat-card>
+<mat-card>
+  <mat-card-header>
+    <mat-card-subtitle>
+      {{ story.title }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <section class="story-content-mvp">
+      <div>
+        <mat-slide-toggle [checked]="story.mvp" (change)="toggleMvp($event)"
+          >MVP</mat-slide-toggle
+        >
+      </div>
+      <div>
+        <mat-slide-toggle
+          [checked]="story.needsRefinement"
+          (change)="toggleNeedsRefinement($event)"
+        >
+          Refinement
+        </mat-slide-toggle>
+      </div>
+    </section>
+    <section class="story-content-description">
+      <mat-form-field
+        *ngIf="editMode"
+        appearance="outline"
+        class="story-content-text"
+      >
+        <mat-label>Story description</mat-label>
+        <textarea
+          matInput
+          placeholder="Enter epic description"
+          rows="5"
+          [(ngModel)]="story.description"
+        ></textarea>
+      </mat-form-field>
+      <markdown
+        *ngIf="story.description && !editMode"
+        [data]="story.description"
+      ></markdown>
+    </section>
+  </mat-card-content>
+  <mat-card-actions>
+    <button *ngIf="!editMode" mat-icon-button (click)="editStory()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button *ngIf="editMode" mat-icon-button (click)="saveStoryDescription()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button *ngIf="editMode" mat-icon-button (click)="cancelStoryChanges()">
+      <mat-icon>delete </mat-icon>
+    </button>
+    <button mat-icon-button [cdkCopyToClipboard]="story.description">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
