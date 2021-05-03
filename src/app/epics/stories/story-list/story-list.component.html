@@ -22,11 +22,36 @@
         (selectionChange)="selectionChanged($event)"
       >
         <mat-list-option
-          *ngFor="let story of stories"
+          *ngFor="let story of stories; index as i"
           cdkDrag
           [value]="story"
-          >{{ story.title }}</mat-list-option
+          (mouseenter)="mouseEnter($event, i)"
+          (mouseleave)="mouseLeave($event, i)"
+          class="story-item"
         >
+          <div fxLayout="row" fxLayoutAlign="center" class="story-item">
+            <div>
+              <p>{{ story.title }}</p>
+            </div>
+            <div fxFlex></div>
+            <div>
+              <button
+                mat-icon-button
+                (click)="edit($event)"
+                *ngIf="showMenu(i)"
+              >
+                <mat-icon matListIcon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                (click)="delete($event)"
+                *ngIf="showMenu(i)"
+              >
+                <mat-icon matListIcon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-list-option>
       </mat-selection-list>
     </div>
   </mat-card-content>
