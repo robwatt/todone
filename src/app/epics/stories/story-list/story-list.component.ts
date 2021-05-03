@@ -26,6 +26,7 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
   @Output() selectedStory: EventEmitter<Story> = new EventEmitter<Story>();
 
   stories: Story[];
+  private hoverIndex: number;
   private storySub: Subscription;
 
   constructor(private storyService: StoryService) {}
@@ -87,6 +88,45 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
    */
   selectionChanged(event: MatSelectionListChange): void {
     this.selectedStory.emit(event.options[0].value);
+  }
+
+  edit(event: any): void {
+    console.log('edit event', event);
+    event.stopPropagation();
+  }
+
+  delete(event: any): void {
+    console.log('delete event', event);
+    event.stopPropagation();
+  }
+
+  /**
+   * When the mouse enters the item, we can turn the menu buttons on
+   * @param event MouseEvent
+   * @param hoverIndex index that the mouse is entering
+   */
+  mouseEnter(event: MouseEvent, hoverIndex: number): void {
+    this.hoverIndex = hoverIndex;
+  }
+
+  /**
+   * When the mouse leaves the item, we can turn the menu buttons off
+   * @param event MouseEvent
+   * @param hoverIndex index that the mouse is leaving
+   */
+  mouseLeave(event: MouseEvent, hoverIndex: number): void {
+    if (hoverIndex === this.hoverIndex) {
+      this.hoverIndex = -1;
+    }
+  }
+
+  /**
+   * Called to determine if the menu should be shown on the story list
+   * @param index Index the mouse is hovering over.
+   */
+  showMenu(index: number): boolean {
+    return this.hoverIndex === index;
+    // return true;
   }
 
   /**
