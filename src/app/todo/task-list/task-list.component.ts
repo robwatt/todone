@@ -181,38 +181,37 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * @param end End date to compare against
    */
   private compareDate(start: DateTime, end: DateTime): number {
-    const diff = end.diff(start, 'day');
-
-    if (diff.years === 0) {
-      if (diff.months === 0) {
-        if (diff.days === 0) {
+    const duration = start.until(end).toDuration(['years', 'months', 'days']);
+    if (duration.years === 0) {
+      if (duration.months === 0) {
+        if (duration.days === 0) {
           // today
           return 0;
         }
-        if (diff.days === 1) {
+        if (duration.days === 1) {
           // yesterday
           return 1;
         }
-        if (diff.days < 7) {
+        if (duration.days < 7) {
           // this week
           return 2;
         }
-        if (diff.days < 14) {
+        if (duration.days < 14) {
           // last week
           return 3;
         }
         // this month
         return 4;
       }
-      if (diff.months === 1) {
+      if (duration.months === 1) {
         // last month
         return 5;
       }
-      if (diff.months < 3) {
+      if (duration.months < 3) {
         // this quarter
         return 6;
       }
-      if (diff.months < 6) {
+      if (duration.months < 6) {
         // last quarter
         return 7;
       }
