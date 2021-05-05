@@ -9,4 +9,11 @@
       width: 100%;
     }
   }
+
+  &-header {
+    &-avatar {
+      font-size: 3em;
+      color: rgb(0, 133, 221);
+    }
+  }
 }

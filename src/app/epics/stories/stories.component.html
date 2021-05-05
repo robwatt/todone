@@ -3,6 +3,6 @@
     <app-story-list [epic]="epic" (selectedStory)="onSelectedStory($event)"></app-story-list>
   </div>
   <div *ngIf="selectedStory" class="card-50">
-    <app-story-details [story]="selectedStory"></app-story-details>
+    <app-story-details (closeStory)="closeStory()" [story]="selectedStory"></app-story-details>
   </div>
 </div>

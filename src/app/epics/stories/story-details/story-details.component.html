@@ -1,8 +1,18 @@
 <mat-card>
-  <mat-card-header>
-    <mat-card-subtitle>
-      {{ story.title }}
-    </mat-card-subtitle>
+  <mat-card-header fxLayout="row">
+    <div mat-card-avatar>
+      <mat-icon class="story-header-avatar">auto_stories</mat-icon>
+    </div>
+    <mat-card-title-group>
+      <mat-card-title>Story details</mat-card-title>
+      <mat-card-subtitle>
+        {{ story.title }}
+      </mat-card-subtitle>
+    </mat-card-title-group>
+    <div fxFlex></div>
+    <button mat-icon-button (click)="closeDetails()">
+      <mat-icon>close</mat-icon>
+    </button>
   </mat-card-header>
 
   <mat-card-content>
@@ -31,7 +41,7 @@
         <textarea
           matInput
           placeholder="Enter epic description"
-          rows="5"
+          rows="10"
           [(ngModel)]="story.description"
         ></textarea>
       </mat-form-field>

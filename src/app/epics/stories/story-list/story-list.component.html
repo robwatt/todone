@@ -20,6 +20,7 @@
         [multiple]="false"
         #storyList
         (selectionChange)="selectionChanged($event)"
+        (click)="onListClick()"
       >
         <mat-list-option
           *ngFor="let story of stories; index as i"

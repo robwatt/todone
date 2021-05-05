@@ -28,6 +28,7 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
   stories: Story[];
   private hoverIndex: number;
   private storySub: Subscription;
+  private _selectedStory: Story;
 
   constructor(private storyService: StoryService) {}
 
@@ -87,7 +88,7 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
    * @param event Selection Change event.
    */
   selectionChanged(event: MatSelectionListChange): void {
-    this.selectedStory.emit(event.options[0].value);
+    this._selectedStory = event.options[0].value;
   }
 
   edit(event: any): void {
@@ -126,7 +127,10 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
    */
   showMenu(index: number): boolean {
     return this.hoverIndex === index;
-    // return true;
+  }
+
+  onListClick(): void {
+    this.selectedStory.emit(this._selectedStory);
   }
 
   /**
