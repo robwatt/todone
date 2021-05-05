@@ -39,4 +39,9 @@ export class StoriesComponent implements OnInit, OnChanges {
   onSelectedStory(story: Story): void {
     this.selectedStory = story;
   }
+
+  closeStory(): void {
+    // closing the selected story
+    this.selectedStory = undefined;
+  }
 }

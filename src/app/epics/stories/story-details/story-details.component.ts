@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Story } from 'src/app/models/story';
 import { StoryService } from 'src/app/services/story.service';
@@ -10,6 +10,7 @@ import { StoryService } from 'src/app/services/story.service';
 })
 export class StoryDetailsComponent implements OnInit {
   @Input() story: Story;
+  @Output() closeStory: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   editMode = false;
 
@@ -62,5 +63,13 @@ export class StoryDetailsComponent implements OnInit {
   cancelStoryChanges(): void {
     this.story.description = this.oldDescription;
     this.editMode = false;
+  }
+
+  /**
+   * Informs listeners that the user wishes to close the story details.
+   */
+  closeDetails(): void {
+    this.story = null;
+    this.closeStory.emit(true);
   }
 }
