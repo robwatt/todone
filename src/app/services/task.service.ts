@@ -232,9 +232,8 @@ export class TaskService implements OnDestroy {
    */
   closeTask(): void {
     if (this.subtaskItems) {
+      this.subtaskItems.next([]);
       this.subtaskSubscription.unsubscribe();
-      this.subtaskItems.unsubscribe();
-      this.subtaskItems = null;
       this.subtaskCollection = null;
     }
   }
