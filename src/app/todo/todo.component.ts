@@ -44,11 +44,12 @@ export class TodoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.preferencesSubscription  = this.preferencesService.taskPrefSubject.subscribe((preferences: any) => {
-      if (preferences) {
-        this.taskFilters = preferences.filters;
-      }
-    });
+    this.preferencesSubscription =
+      this.preferencesService.taskPrefSubject.subscribe((preferences: any) => {
+        if (preferences) {
+          this.taskFilters = preferences.filters;
+        }
+      });
   }
 
   ngOnDestroy(): void {

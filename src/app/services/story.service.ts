@@ -52,6 +52,10 @@ export class StoryService {
     this.storyCollection.doc(storyId).update(data);
   }
 
+  deleteStory(storyId: string): void {
+    this.storyCollection.doc(storyId).delete();
+  }
+
   private incremementPriority(): number {
     this.lastPriority = this.lastPriority + 1;
     return this.lastPriority;

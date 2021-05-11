@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DateTime } from 'luxon';
+import { EditContentComponent } from '../../common/edit-content/edit-content.component';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
-import { EditContentComponent } from '../edit-content/edit-content.component';
 
 export interface EditDialogData {
   name: string;
@@ -40,7 +40,7 @@ export class TaskComponent implements OnInit {
     event.stopPropagation();
     const dialogRef = this.dialog.open(EditContentComponent, {
       width: '500px',
-      data: { name: this.task.name }
+      data: { name: this.task.name, title: 'Edit task', label: 'Task name' }
     });
 
     dialogRef.afterClosed().subscribe((result) => {

@@ -38,14 +38,14 @@
             <div>
               <button
                 mat-icon-button
-                (click)="edit($event)"
+                (click)="edit($event, story)"
                 *ngIf="showMenu(i)"
               >
                 <mat-icon matListIcon>edit</mat-icon>
               </button>
               <button
                 mat-icon-button
-                (click)="delete($event)"
+                (click)="delete($event, story)"
                 *ngIf="showMenu(i)"
               >
                 <mat-icon matListIcon>delete</mat-icon>

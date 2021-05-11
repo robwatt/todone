@@ -1,7 +1,7 @@
-<h1 mat-dialog-title>Edit task</h1>
+<h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
   <mat-form-field class="name">
-    <mat-label>Task name</mat-label>
+    <mat-label>{{ data.label }}</mat-label>
     <input matInput [(ngModel)]="data.name" />
   </mat-form-field>
 </div>
