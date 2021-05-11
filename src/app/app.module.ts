@@ -50,7 +50,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { RegisterComponent } from './register/register.component';
 import { AddTaskFieldComponent } from './todo/add-task-field/add-task-field.component';
 import { DetailsComponent } from './todo/details/details.component';
-import { EditContentComponent } from './todo/edit-content/edit-content.component';
+import { EditContentComponent} from './common/edit-content/edit-content.component';
 import { FilterComponent } from './todo/filter/filter.component';
 import { TaskListComponent } from './todo/task-list/task-list.component';
 import { TaskComponent } from './todo/task/task.component';

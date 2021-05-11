@@ -9,9 +9,11 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSelectionListChange } from '@angular/material/list';
 import { isEmpty } from 'lodash';
 import { Subscription } from 'rxjs';
+import { EditContentComponent } from 'src/app/common/edit-content/edit-content.component';
 import { Epic } from 'src/app/models/epic';
 import { Story } from 'src/app/models/story';
 import { StoryService } from 'src/app/services/story.service';
@@ -30,7 +32,7 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
   private storySub: Subscription;
   private _selectedStory: Story;
 
-  constructor(private storyService: StoryService) {}
+  constructor(private storyService: StoryService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.createStorySubscription();
@@ -81,6 +83,23 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
    */
   drop(event: any): void {
     console.log('EVENT:: drop event', event);
+    // console.log('current index', this.stories[event.currentIndex]);
+    // console.log('previous index', this.stories[event.previousIndex]);
+
+    // this represents the index of the item that was picked up
+    const pre = event.previousIndex;
+    // this represents the index that the item was dropped
+    const cur = event.currentIndex;
+
+    // determine what is the start index and what is the end index
+    const start = pre < cur ? pre : cur;
+    const end = pre < cur ? cur : pre;
+
+    console.log('start, end', start, end);
+
+    const priIndex = start > 0 ? start - 1 : start;
+    const startPriority = this.stories[priIndex];
+    console.log('priIndex, startPriority', priIndex, startPriority.priority);
   }
 
   /**
@@ -91,14 +110,32 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
     this._selectedStory = event.options[0].value;
   }
 
-  edit(event: any): void {
-    console.log('edit event', event);
+  /**
+   * Update the title of the story
+   * @param event MouseEvent
+   * @param story Story the user is trying to update the title of
+   */
+  edit(event: MouseEvent, story: Story): void {
     event.stopPropagation();
+    const dialogRef = this.dialog.open(EditContentComponent, {
+      width: '500px',
+      data: { name: story.title, title: 'Edit story', label: 'Story name' }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // need to update the stories name
+      this.storyService.updateStory(story.id, { title: result });
+    });
   }
 
-  delete(event: any): void {
-    console.log('delete event', event);
+  /**
+   * Deletes the selected story
+   * @param event MouseEvent
+   * @param story Story to be deleted
+   */
+  delete(event: MouseEvent, story: Story): void {
     event.stopPropagation();
+    this.storyService.deleteStory(story.id);
   }
 
   /**

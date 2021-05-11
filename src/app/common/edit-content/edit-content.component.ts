@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EditDialogData } from '../task/task.component';
+
+export interface EditDialogData {
+  name: string;
+  title: string;
+  label: string;
+}
 
 @Component({
   selector: 'app-edit-content',
@@ -8,11 +13,12 @@ import { EditDialogData } from '../task/task.component';
   styleUrls: ['./edit-content.component.scss']
 })
 export class EditContentComponent implements OnInit {
+  constructor(
+    private dialogRef: MatDialogRef<EditContentComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: EditDialogData
+  ) {}
 
-  constructor(private dialogRef: MatDialogRef<EditContentComponent>, @Inject(MAT_DIALOG_DATA) public data: EditDialogData) { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   cancel(): void {
     this.dialogRef.close();
