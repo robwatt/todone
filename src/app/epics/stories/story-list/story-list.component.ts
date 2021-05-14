@@ -82,10 +82,6 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
    * @param event dnd event.
    */
   drop(event: any): void {
-    console.log('EVENT:: drop event', event);
-    // console.log('current index', this.stories[event.currentIndex]);
-    // console.log('previous index', this.stories[event.previousIndex]);
-
     // this represents the index of the item that was picked up
     const pre = event.previousIndex;
     // this represents the index that the item was dropped
@@ -94,12 +90,28 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
     // determine what is the start index and what is the end index
     const start = pre < cur ? pre : cur;
     const end = pre < cur ? cur : pre;
+    const startPriority = this.stories[start].priority;
 
-    console.log('start, end', start, end);
+    // create a subset of stories that encompass that part of the array the user is moving
+    // the story from => to; we don't need anything outside of this.
+    let storySubset = this.stories.splice(start, end - start + 1);
+    // switch first and last index
+    storySubset = this.swap(storySubset);
 
-    const priIndex = start > 0 ? start - 1 : start;
-    const startPriority = this.stories[priIndex];
-    console.log('priIndex, startPriority', priIndex, startPriority.priority);
+    // create partial story updates and put in a map for batch update
+    const updatedStories = [];
+    let priorityCounter: number = startPriority;
+    storySubset.forEach((story) => {
+      const data = {
+        id: story.id,
+        data: { priority: priorityCounter }
+      };
+      updatedStories.push(data);
+      priorityCounter = priorityCounter + 1;
+    });
+    if (updatedStories.length > 0) {
+      this.storyService.updateStories(updatedStories);
+    }
   }
 
   /**
@@ -168,6 +180,15 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
 
   onListClick(): void {
     this.selectedStory.emit(this._selectedStory);
+  }
+
+  /**
+   * Swaps the first and last elements of the provided array
+   * @param array Array to swap elements of
+   */
+  private swap(array: any): [] {
+    [array[0], array[array.length - 1]] = [array[array.length - 1], array[0]];
+    return array;
   }
 
   /**
