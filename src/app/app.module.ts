@@ -55,6 +55,8 @@ import { FilterComponent } from './todo/filter/filter.component';
 import { TaskListComponent } from './todo/task-list/task-list.component';
 import { TaskComponent } from './todo/task/task.component';
 import { TodoComponent } from './todo/todo.component';
+import { NoteListComponent } from './notes/note-list/note-list.component';
+import { NotesComponent } from './notes/notes.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +79,9 @@ import { TodoComponent } from './todo/todo.component';
     EpicDetailsComponent,
     StoriesComponent,
     StoryDetailsComponent,
-    StoryListComponent
+    StoryListComponent,
+    NoteListComponent,
+    NotesComponent
   ],
   imports: [
     BrowserModule,
