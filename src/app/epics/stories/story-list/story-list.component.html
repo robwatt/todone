@@ -30,11 +30,10 @@
           (mouseleave)="mouseLeave($event, i)"
           class="story-item"
         >
-          <div fxLayout="row" fxLayoutAlign="center" class="story-item">
-            <div>
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="story-item">
+            <div fxFlex >
               <p>{{ story.title }}</p>
             </div>
-            <div fxFlex></div>
             <div>
               <button
                 mat-icon-button
