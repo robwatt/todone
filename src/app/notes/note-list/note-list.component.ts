@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Note } from 'src/app/models/note';
+import { NotesService } from 'src/app/services/notes.service';
 
 @Component({
   selector: 'app-note-list',
@@ -12,6 +13,8 @@ import { Note } from 'src/app/models/note';
 export class NoteListComponent implements OnInit {
   @Output() note: EventEmitter<Note> = new EventEmitter<Note>();
 
+  notes: Note[];
+
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -19,7 +22,11 @@ export class NoteListComponent implements OnInit {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver, private notesService: NotesService) {
+    this.notesService.noteItems.subscribe((notes) => {
+      this.notes = notes;
+    });
+  }
 
   ngOnInit(): void {}
 
