@@ -13,12 +13,15 @@ import { NotesService } from 'src/app/services/notes.service';
 export class NoteDetailsComponent implements OnInit {
   @Input() note: Note;
 
+  editMode = false;
   selectable = true;
   removeable = true;
   addOnBlur = true;
   tagCtrl = new FormControl();
 
   readonly separatorKeyCodes = [ENTER, COMMA] as const;
+
+  private oldDescription: string;
 
   constructor(private notesService: NotesService) {}
 
@@ -37,6 +40,7 @@ export class NoteDetailsComponent implements OnInit {
       // just update the existing note
       this.notesService.updateNote(this.note.id, this.note);
     }
+    this.editMode = false;
   }
 
   /**
@@ -62,5 +66,21 @@ export class NoteDetailsComponent implements OnInit {
     if (index >= 0) {
       this.note.tags.splice(index, 1);
     }
+  }
+
+  /**
+   * Switches the note details to edit mode
+   */
+   editNote(): void {
+    this.oldDescription = this.note.description;
+    this.editMode = true;
+  }
+
+  /**
+   * Cancels edit mode, and reverts to the old description.
+   */
+   cancelNoteChanges(): void {
+    this.note.description = this.oldDescription;
+    this.editMode = false;
   }
 }

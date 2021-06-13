@@ -2,9 +2,6 @@
   <mat-form-field appearance="outline">
     <mat-label>Title</mat-label>
     <input matInput type="text" [(ngModel)]="note.title" />
-    <button matSuffix mat-icon-button color="primary" (click)="save()">
-      <mat-icon>save</mat-icon>
-    </button>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Tags</mat-label>
@@ -29,4 +26,33 @@
       />
     </mat-chip-list>
   </mat-form-field>
+  <mat-form-field
+    *ngIf="editMode"
+    appearance="outline"
+    class="note-description"
+  >
+    <mat-label>Note description</mat-label>
+    <textarea
+      matInput
+      placeholder="Enter note description"
+      rows="20"
+      [(ngModel)]="note.description"
+    ></textarea>
+  </mat-form-field>
+  <markdown
+    *ngIf="note.description && !editMode"
+    [data]="note.description"
+  ></markdown>
+  <p *ngIf="!note.description && !editMode">Enter note description</p>
+  <div class="note-button-row">
+    <button *ngIf="!editMode" mat-icon-button (click)="editNote()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button *ngIf="editMode" mat-icon-button (click)="save()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button *ngIf="editMode" mat-icon-button (click)="cancelNoteChanges()">
+      <mat-icon>undo</mat-icon>
+    </button>
+  </div>
 </div>
