@@ -5,7 +5,7 @@ import {
   DocumentChangeAction,
   Query
 } from '@angular/fire/firestore';
-import { Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Note } from '../models/note';
 import { AuthenticationService } from './authentication.service';
 
@@ -22,6 +22,8 @@ export class NotesService {
     private afs: AngularFirestore,
     private auth: AuthenticationService
   ) {
+    this.noteItems = new BehaviorSubject<Note[]>(null);
+
     this.auth.loggedIn.subscribe((result: boolean) => {
       if (result) {
         const uid = this.auth.getUID();
@@ -36,16 +38,12 @@ export class NotesService {
    * Adds a new note with the given title
    * @param epicTitle Title of the new note
    */
-   addNote(noteTitle: string): void {
-    const note = {
-      title: noteTitle,
-      description: '',
-      tags: []
-    };
-    this.notesCollection.add(note);
+   async addNote(note: Note): Promise<string> {
+    const newDoc = await this.notesCollection.add(note);
     // refresh the list of notes - this might be a bit heavy handed for what I think will be needed,
     // I can always change it later
     this.getNotes();
+    return newDoc.id;
   }
 
   /**

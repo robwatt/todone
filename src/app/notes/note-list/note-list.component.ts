@@ -1,7 +1,8 @@
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { Note } from 'src/app/models/note';
 
 @Component({
   selector: 'app-note-list',
@@ -9,6 +10,8 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./note-list.component.scss']
 })
 export class NoteListComponent implements OnInit {
+  @Output() note: EventEmitter<Note> = new EventEmitter<Note>();
+
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -23,5 +26,14 @@ export class NoteListComponent implements OnInit {
   /**
    * This triggers the process to create a new note
    */
-  createNote(): void {}
+  createNote(): void {
+    // create an empty note and display to the user
+    const newNote: Note = {
+      title: '',
+      description: '',
+      tags: []
+    };
+
+    this.note.emit(newNote);
+  }
 }

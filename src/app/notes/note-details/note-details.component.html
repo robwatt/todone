@@ -1,0 +1,32 @@
+<div *ngIf="note" class="note" fxLayout="column" fxLayoutAlign="start stretch">
+  <mat-form-field appearance="outline">
+    <mat-label>Title</mat-label>
+    <input matInput type="text" [(ngModel)]="note.title" />
+    <button matSuffix mat-icon-button color="primary" (click)="save()">
+      <mat-icon>save</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Tags</mat-label>
+    <mat-chip-list #chipList>
+      <mat-chip
+        *ngFor="let tag of note.tags"
+        [selectable]="true"
+        [removable]="true"
+        (removed)="remove(tag)"
+      >
+        {{ tag }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="New tag..."
+        #tagInput
+        [formControl]="tagCtrl"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+  </mat-form-field>
+</div>

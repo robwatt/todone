@@ -4,7 +4,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -57,6 +57,7 @@ import { TaskComponent } from './todo/task/task.component';
 import { TodoComponent } from './todo/todo.component';
 import { NoteListComponent } from './notes/note-list/note-list.component';
 import { NotesComponent } from './notes/notes.component';
+import { NoteDetailsComponent } from './notes/note-details/note-details.component';
 
 @NgModule({
   declarations: [
@@ -81,13 +82,15 @@ import { NotesComponent } from './notes/notes.component';
     StoryDetailsComponent,
     StoryListComponent,
     NoteListComponent,
-    NotesComponent
+    NotesComponent,
+    NoteDetailsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     AngularFireAuthModule,
     NgxAuthFirebaseUIModule.forRoot(
       environment.firebaseConfig,

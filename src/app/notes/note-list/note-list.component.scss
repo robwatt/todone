@@ -11,7 +11,7 @@
 
   &-list {
     width: 250px;
-    height: auto;
+    height: 100%;
     border-right: solid 1px lightgray;
     
     display: flex;
@@ -22,10 +22,6 @@
       width: calc(100% - 20px);
       margin: 0 10px;
       margin-bottom: 30px;
-    }
-
-    &-content {
-      flex: 1 1 auto;
     }
   }
 }
