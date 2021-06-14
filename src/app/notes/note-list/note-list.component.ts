@@ -22,7 +22,10 @@ export class NoteListComponent implements OnInit {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private notesService: NotesService) {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private notesService: NotesService
+  ) {
     this.notesService.noteItems.subscribe((notes) => {
       this.notes = notes;
     });
@@ -42,5 +45,13 @@ export class NoteListComponent implements OnInit {
     };
 
     this.note.emit(newNote);
+  }
+
+  /**
+   * Opens the selected note in the details screen
+   * @param note Note to view
+   */
+  openNote(note: Note): void {
+    this.note.emit(note);
   }
 }

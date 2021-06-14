@@ -5,9 +5,9 @@
       Note
     </button>
     <div class="notes-list-content">
-      <mat-list>
+      <mat-action-list>
         <div mat-subheader>Notes</div>
-        <mat-list-item *ngFor="let note of notes">{{note.title}}</mat-list-item>
-      </mat-list>
+        <button mat-list-item *ngFor="let note of notes" (click)="openNote(note)">{{note.title}}</button>
+      </mat-action-list>
     </div>
   </div>
