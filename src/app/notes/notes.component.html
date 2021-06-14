@@ -1,1 +1,4 @@
-<app-note-list></app-note-list>
+<div fxLayout="row" fxLayout="start stretch" class="notes">
+  <app-note-list (note)="selectedNote($event)"></app-note-list>
+  <app-note-details fxFlex [note]="note"></app-note-details>
+</div>

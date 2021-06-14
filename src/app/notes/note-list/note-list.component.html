@@ -1,14 +1,13 @@
-<div>
-  <div class="notes-list">
+  <div class="notes-list" fxLayout="column" fxLayoutAlign="start start">
     <div class="notes-header">Notes</div>
     <button mat-flat-button color="primary" (click)="createNote()" class="notes-list-create">
       <mat-icon>add</mat-icon>
       Note
     </button>
     <div class="notes-list-content">
-      <mat-list>
+      <mat-action-list>
         <div mat-subheader>Notes</div>
-      </mat-list>
+        <button mat-list-item *ngFor="let note of notes" (click)="openNote(note)">{{note.title}}</button>
+      </mat-action-list>
     </div>
   </div>
-</div>

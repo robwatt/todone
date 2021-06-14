@@ -1,0 +1,9 @@
+.note {
+  margin: 20px;
+  &-description {
+    width: 100%;
+  }
+  &-button-row {
+    display: table-cell;
+  }
+}
