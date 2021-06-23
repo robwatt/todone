@@ -1,9 +1,12 @@
 .note {
   margin: 20px;
+  &-search {
+    margin: 20px 20px 0;
+  }
   &-description {
     width: 100%;
   }
-  &-button-row {
-    display: table-cell;
+  &-search-bar {
+    width: 100%;
   }
 }

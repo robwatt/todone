@@ -58,6 +58,8 @@ import { TodoComponent } from './todo/todo.component';
 import { NoteListComponent } from './notes/note-list/note-list.component';
 import { NotesComponent } from './notes/notes.component';
 import { NoteDetailsComponent } from './notes/note-details/note-details.component';
+import { NoteSearchBarComponent } from './notes/note-details/note-search-bar/note-search-bar.component';
+import { NoteActionBarComponent } from './notes/note-details/note-action-bar/note-action-bar.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import { NoteDetailsComponent } from './notes/note-details/note-details.componen
     StoryListComponent,
     NoteListComponent,
     NotesComponent,
-    NoteDetailsComponent
+    NoteDetailsComponent,
+    NoteSearchBarComponent,
+    NoteActionBarComponent
   ],
   imports: [
     BrowserModule,

@@ -1,9 +1,13 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Note } from 'src/app/models/note';
 import { NotesService } from 'src/app/services/notes.service';
+import {
+  NoteAction,
+  NoteActionBarComponent
+} from './note-action-bar/note-action-bar.component';
 
 @Component({
   selector: 'app-note-details',
@@ -12,8 +16,8 @@ import { NotesService } from 'src/app/services/notes.service';
 })
 export class NoteDetailsComponent implements OnInit {
   @Input() note: Note;
+  @ViewChild('actionBar') actionBar: NoteActionBarComponent;
 
-  editMode = false;
   selectable = true;
   removeable = true;
   addOnBlur = true;
@@ -21,6 +25,7 @@ export class NoteDetailsComponent implements OnInit {
 
   readonly separatorKeyCodes = [ENTER, COMMA] as const;
 
+  // TODO: this should be the entire note, becuase if the user undos the note, we should return tags and title back to the old
   private oldDescription: string;
 
   constructor(private notesService: NotesService) {}
@@ -28,19 +33,23 @@ export class NoteDetailsComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
-   * Saves the current note.  This could be adding a new note, or updating an existing note with new information
+   * Handles the note action from the action bar
+   * @param action Action the user wants to take for the note.
    */
-  async save(): Promise<void> {
-    if (this.note.id === undefined) {
-      // add the new note
-      const id = await this.notesService.addNote(this.note);
-      this.note.id = id;
+  noteAction(action: NoteAction): void {
+    switch (action) {
+      case NoteAction.Edit:
+        this.editNote(true);
+        break;
+      case NoteAction.Undo:
+        this.editNote(false);
+        break;
+      case NoteAction.Save:
+        this.save();
+        break;
+      case NoteAction.Archive:
+        break;
     }
-    else {
-      // just update the existing note
-      this.notesService.updateNote(this.note.id, this.note);
-    }
-    this.editMode = false;
   }
 
   /**
@@ -69,18 +78,28 @@ export class NoteDetailsComponent implements OnInit {
   }
 
   /**
-   * Switches the note details to edit mode
+   * Saves the current note.  This could be adding a new note, or updating an existing note with new information
    */
-   editNote(): void {
-    this.oldDescription = this.note.description;
-    this.editMode = true;
+   private async save(): Promise<void> {
+    if (this.note.id === undefined) {
+      // add the new note
+      const id = await this.notesService.addNote(this.note);
+      this.note.id = id;
+    } else {
+      // just update the existing note
+      this.notesService.updateNote(this.note.id, this.note);
+    }
   }
 
   /**
-   * Cancels edit mode, and reverts to the old description.
+   * Switches the note details to edit/view mode
+   * @param edit edit mode if true, view mode if false.
    */
-   cancelNoteChanges(): void {
-    this.note.description = this.oldDescription;
-    this.editMode = false;
+  private editNote(edit: boolean): void {
+    if (edit) {
+      this.oldDescription = this.note.description;
+    } else {
+      this.note.description = this.oldDescription;
+    }
   }
 }
