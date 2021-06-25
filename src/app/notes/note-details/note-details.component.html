@@ -1,15 +1,29 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="start center"
+  fxLayoutGap="10px"
+  class="note-search"
+>
+  <app-note-search-bar class="note-search-bar"></app-note-search-bar>
+</div>
+<app-note-action-bar #actionBar [note]="note" (action)="noteAction($event)"></app-note-action-bar>
 <div *ngIf="note" class="note" fxLayout="column" fxLayoutAlign="start stretch">
   <mat-form-field appearance="outline">
     <mat-label>Title</mat-label>
-    <input matInput type="text" [(ngModel)]="note.title" />
+    <input
+      matInput
+      type="text"
+      [(ngModel)]="note.title"
+      [disabled]="!actionBar.editMode"
+    />
   </mat-form-field>
   <mat-form-field>
     <mat-label>Tags</mat-label>
     <mat-chip-list #chipList>
       <mat-chip
         *ngFor="let tag of note.tags"
-        [selectable]="true"
-        [removable]="true"
+        [selectable]="actionBar.editMode"
+        [removable]="actionBar.editMode"
         (removed)="remove(tag)"
       >
         {{ tag }}
@@ -18,6 +32,7 @@
       <input
         placeholder="New tag..."
         #tagInput
+        [disabled]="!actionBar.editMode"
         [formControl]="tagCtrl"
         [matChipInputFor]="chipList"
         [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
@@ -27,7 +42,7 @@
     </mat-chip-list>
   </mat-form-field>
   <mat-form-field
-    *ngIf="editMode"
+    *ngIf="actionBar.editMode"
     appearance="outline"
     class="note-description"
   >
@@ -40,19 +55,8 @@
     ></textarea>
   </mat-form-field>
   <markdown
-    *ngIf="note.description && !editMode"
+    *ngIf="note.description && !actionBar.editMode"
     [data]="note.description"
   ></markdown>
-  <p *ngIf="!note.description && !editMode">Enter note description</p>
-  <div class="note-button-row">
-    <button *ngIf="!editMode" mat-icon-button (click)="editNote()">
-      <mat-icon>edit</mat-icon>
-    </button>
-    <button *ngIf="editMode" mat-icon-button (click)="save()">
-      <mat-icon>save</mat-icon>
-    </button>
-    <button *ngIf="editMode" mat-icon-button (click)="cancelNoteChanges()">
-      <mat-icon>undo</mat-icon>
-    </button>
-  </div>
+  <p *ngIf="!note.description && !actionBar.editMode">Enter note description</p>
 </div>
