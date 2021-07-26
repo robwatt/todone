@@ -9,6 +9,7 @@ export enum NoteAction {
   Save,
   Archive,
   Undo,
+  Delete,
   View
 }
 
@@ -58,5 +59,10 @@ export class NoteActionBarComponent implements OnInit {
   archive(): void {
     this.editMode = false;
     this.action.emit(NoteAction.Archive);
+  }
+
+  delete(): void {
+    this.editMode = false;
+    this.action.emit(NoteAction.Delete);
   }
 }

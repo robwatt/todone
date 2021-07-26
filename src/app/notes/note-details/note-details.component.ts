@@ -24,9 +24,7 @@ export class NoteDetailsComponent implements OnInit {
   tagCtrl = new FormControl();
 
   readonly separatorKeyCodes = [ENTER, COMMA] as const;
-
-  // TODO: this should be the entire note, becuase if the user undos the note, we should return tags and title back to the old
-  private oldDescription: string;
+  private oldNote: Note;
 
   constructor(private notesService: NotesService) {}
 
@@ -48,6 +46,10 @@ export class NoteDetailsComponent implements OnInit {
         this.save();
         break;
       case NoteAction.Archive:
+        this.archive();
+        break;
+      case NoteAction.Delete:
+        this.delete();
         break;
     }
   }
@@ -80,7 +82,7 @@ export class NoteDetailsComponent implements OnInit {
   /**
    * Saves the current note.  This could be adding a new note, or updating an existing note with new information
    */
-   private async save(): Promise<void> {
+  private async save(): Promise<void> {
     if (this.note.id === undefined) {
       // add the new note
       const id = await this.notesService.addNote(this.note);
@@ -92,14 +94,67 @@ export class NoteDetailsComponent implements OnInit {
   }
 
   /**
+   * Deletes the current Note.  Once a note is deleted the detail page should be destroyed and the list should no longer have this as a
+   * selected note.
+   */
+  private delete(): void {
+  }
+
+  /**
+   * Archives the current Note.  Archiving a Note means it will appear greyed out and can be filtered out, but the data is still available.
+   */
+  private archive(): void {}
+
+  /**
    * Switches the note details to edit/view mode
    * @param edit edit mode if true, view mode if false.
    */
   private editNote(edit: boolean): void {
     if (edit) {
-      this.oldDescription = this.note.description;
+      this.oldNote = this.deepCopy(this.note);
     } else {
-      this.note.description = this.oldDescription;
+      this.note = this.oldNote;
     }
+  }
+
+  /**
+   * Does a deep copy of an object.
+   * @param obj Object to be deep copied
+   */
+  private deepCopy(obj: any): any {
+    let copy: any;
+
+    if (null === obj || 'object' !== typeof obj) {
+      return obj;
+    }
+
+    // Handle Date
+    if (obj instanceof Date) {
+      copy = new Date();
+      copy.setTime(obj.getTime());
+      return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+      copy = [];
+      for (let i = 0, len = obj.length; i < len; i++) {
+        copy[i] = this.deepCopy(obj[i]);
+      }
+      return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+      copy = {};
+      for (const attr in obj) {
+        if (obj.hasOwnProperty(attr)) {
+          copy[attr] = this.deepCopy(obj[attr]);
+        }
+      }
+      return copy;
+    }
+
+    throw new Error(`Unable to copy obj! Its type isn't supported.`);
   }
 }
