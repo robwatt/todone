@@ -82,36 +82,36 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
    * @param event dnd event.
    */
   drop(event: any): void {
+    console.log('drop event', event);
     // this represents the index of the item that was picked up
     const pre = event.previousIndex;
     // this represents the index that the item was dropped
     const cur = event.currentIndex;
 
-    // determine what is the start index and what is the end index
-    const start = pre < cur ? pre : cur;
-    const end = pre < cur ? cur : pre;
-    const startPriority = this.stories[start].priority;
+    if (cur !== pre) {
+      // we are moving the item closer to the start of the array
+      const noteToMove = this.stories[pre];
+      this.stories.splice(pre, 1);
+      // add the note to move at the new index
+      this.stories.splice(cur, 0, noteToMove);
+    } else {
+      // do nothing since we just dropped this on to itself
+      return;
+    }
 
-    // create a subset of stories that encompass that part of the array the user is moving
-    // the story from => to; we don't need anything outside of this.
-    let storySubset = this.stories.splice(start, end - start + 1);
-    // switch first and last index
-    storySubset = this.swap(storySubset);
-
-    // create partial story updates and put in a map for batch update
+    // next is to update the priority of all items in the array...there is probably not going to be a lot of stories so just redo them all
+    let priority = 0;
     const updatedStories = [];
-    let priorityCounter: number = startPriority;
-    storySubset.forEach((story) => {
+    this.stories.forEach((story) => {
       const data = {
         id: story.id,
-        data: { priority: priorityCounter }
+        data: { priority }
       };
       updatedStories.push(data);
-      priorityCounter = priorityCounter + 1;
+      priority = priority + 1;
     });
-    if (updatedStories.length > 0) {
-      this.storyService.updateStories(updatedStories);
-    }
+
+    this.storyService.updateStories(updatedStories);
   }
 
   /**
