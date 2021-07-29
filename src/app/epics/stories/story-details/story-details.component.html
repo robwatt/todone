@@ -18,7 +18,7 @@
   <mat-card-content>
     <section class="story-content-mvp">
       <div>
-        <mat-slide-toggle [checked]="story.mvp" (change)="toggleMvp($event)"
+        <mat-slide-toggle #mvpToggle [checked]="story.mvp" (change)="toggleMvp($event)"
           >MVP</mat-slide-toggle
         >
       </div>

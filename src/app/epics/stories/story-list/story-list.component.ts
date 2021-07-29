@@ -135,8 +135,10 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      // need to update the stories name
-      this.storyService.updateStory(story.id, { title: result });
+      if (result !== undefined) {
+        // need to update the stories name
+        this.storyService.updateStory(story.id, { title: result });
+      }
     });
   }
 
@@ -180,15 +182,6 @@ export class StoryListComponent implements OnInit, OnDestroy, OnChanges {
 
   onListClick(): void {
     this.selectedStory.emit(this._selectedStory);
-  }
-
-  /**
-   * Swaps the first and last elements of the provided array
-   * @param array Array to swap elements of
-   */
-  private swap(array: any): [] {
-    [array[0], array[array.length - 1]] = [array[array.length - 1], array[0]];
-    return array;
   }
 
   /**
