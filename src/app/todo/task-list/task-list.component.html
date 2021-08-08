@@ -1,6 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="space-between" class="task">
   <mat-action-list fxFlex>
     <div mat-subheader *ngIf="groupedTasks.today">Today</div>
+    <mat-divider *ngIf="groupedTasks.today"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.today"
       [task]="task"
@@ -11,6 +12,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.yesterday">Yesterday</div>
+    <mat-divider *ngIf="groupedTasks.yesterday"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.yesterday"
       [task]="task"
@@ -21,6 +23,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.thisWeek">This Week</div>
+    <mat-divider *ngIf="groupedTasks.thisWeek"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.thisWeek"
       [task]="task"
@@ -31,6 +34,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.lastWeek">Last Week</div>
+    <mat-divider *ngIf="groupedTasks.lastWeek"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.lastWeek"
       [task]="task"
@@ -41,6 +45,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.thisMonth">This Month</div>
+    <mat-divider *ngIf="groupedTasks.thisMonth"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.thisMonth"
       [task]="task"
@@ -51,6 +56,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.lastMonth">Last Month</div>
+    <mat-divider *ngIf="groupedTasks.lastMonth"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.lastMonth"
       [task]="task"
@@ -61,6 +67,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.quarter">Quarter</div>
+    <mat-divider *ngIf="groupedTasks.quarter"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.quarter"
       [task]="task"
@@ -71,6 +78,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.lastQuarter">Last Quarter</div>
+    <mat-divider *ngIf="groupedTasks.lastQuarter"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.lastQuarter"
       [task]="task"
@@ -81,6 +89,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.thisYear">This Year</div>
+    <mat-divider *ngIf="groupedTasks.thisYear"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.thisYear"
       [task]="task"
@@ -91,6 +100,7 @@
     >
     </app-task>
     <div mat-subheader *ngIf="groupedTasks.older">Older</div>
+    <mat-divider *ngIf="groupedTasks.older"></mat-divider>
     <app-task
       *ngFor="let task of groupedTasks.older"
       [task]="task"

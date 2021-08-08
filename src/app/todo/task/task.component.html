@@ -1,6 +1,6 @@
 <mat-list-item (click)="open()" (mouseenter)="mouseEnter()" (mouseleave)="mouseLeave()">
-  <mat-icon matListIcon (click)="complete($event)" *ngIf="!task.complete">done</mat-icon>
-  <mat-icon matListIcon (click)="uncomplete($event)" *ngIf="task.complete">remove_done</mat-icon>
+  <mat-icon matListIcon (click)="complete($event)" *ngIf="!task.complete" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+  <mat-icon matListIcon (click)="uncomplete($event)" *ngIf="task.complete" class="complete" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
   <h3 matLine [ngClass]="{ complete: task.complete }">{{ task.name | slice:0:100 }}</h3>
   <p matLine [ngClass]="{ complete: task.complete }">
     {{ toDatetime(task) | dateTimeToFormat: 'MMMM, dd, yyyy' }}
@@ -12,3 +12,4 @@
     <mat-icon matListIcon>delete</mat-icon>
   </button>
 </mat-list-item>
+<mat-divider></mat-divider>

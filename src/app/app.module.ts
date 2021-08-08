@@ -60,6 +60,7 @@ import { NotesComponent } from './notes/notes.component';
 import { NoteDetailsComponent } from './notes/note-details/note-details.component';
 import { NoteSearchBarComponent } from './notes/note-details/note-search-bar/note-search-bar.component';
 import { NoteActionBarComponent } from './notes/note-details/note-action-bar/note-action-bar.component';
+import { IconsModule } from './icons/icons.module';
 
 @NgModule({
   declarations: [
@@ -120,6 +121,7 @@ import { NoteActionBarComponent } from './notes/note-details/note-action-bar/not
     ),
     FlexLayoutModule,
     LuxonModule,
+    IconsModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
