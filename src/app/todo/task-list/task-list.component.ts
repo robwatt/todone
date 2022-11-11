@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Filter } from 'src/app/models/filter';
@@ -6,6 +6,7 @@ import { Page } from 'src/app/models/page';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 import { DateTime } from 'luxon';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-task-list',
@@ -14,6 +15,9 @@ import { DateTime } from 'luxon';
 })
 export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() filters: Filter[];
+  @HostBinding('class') classes = 'h-full';
+
+  @ViewChild('drawer') drawer: MatDrawer;
 
   tasks: Task[] = [];
   selectedTask: Task;
@@ -56,10 +60,14 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   openTask(task: Task): void {
     this.selectedTask = task;
     this.taskService.openTask(task.id);
+    if (!this.drawer.opened) {
+      this.drawer.toggle();
+    }
   }
 
   closeTask(): void {
     this.selectedTask = null;
+    this.drawer.close();
     this.taskService.closeTask();
   }
 

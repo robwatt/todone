@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -21,6 +21,8 @@ const todo: TodoInterface[] = [
   styleUrls: ['./todo.component.scss']
 })
 export class TodoComponent implements OnInit, OnDestroy {
+  // this is required so the component takes up the full width of what is left.
+  @HostBinding('class') classes = 'w-full flex flex-auto';
   title: string;
   taskFilters: Filter[];
 

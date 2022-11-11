@@ -1,9 +1,12 @@
-<div class="dashboard">
-  <h2>{{ title }}</h2>
-  <app-filter [filtersToApply]="taskFilters" (appliedFilters)="appliedFiltersChanged($event)"></app-filter>
-  <app-add-task-field (taskAdded)="taskAdded()"></app-add-task-field>
-  <br />
-  <app-task-list
-    [filters]="taskFilters"
-  ></app-task-list>
+<div class="flex flex-auto h-full pl-5 pt-5">
+  <div class="flex flex-col flex-auto flex-grow h-full w-full">
+    <h2>{{ title }}</h2>
+    <app-filter
+      [filtersToApply]="taskFilters"
+      (appliedFilters)="appliedFiltersChanged($event)"
+    ></app-filter>
+    <app-add-task-field (taskAdded)="taskAdded()"></app-add-task-field>
+    <br />
+    <app-task-list [filters]="taskFilters"></app-task-list>
+  </div>
 </div>

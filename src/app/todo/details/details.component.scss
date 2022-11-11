@@ -16,3 +16,7 @@
 .spacer {
   flex: 1 1 auto;
 }
+
+textarea:focus {
+  outline: none !important;
+}

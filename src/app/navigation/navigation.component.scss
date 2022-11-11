@@ -3,7 +3,7 @@
 }
 
 .sidenav {
-  width: 200px;
+  width: 280px;
 }
 
 .sidenav .mat-toolbar {
@@ -14,4 +14,28 @@
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.content-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-content: stretch;
+  flex: 1;
+}
+
+.main-nav {
+  width: 280px;
+  border-right: 1px solid black;
+}
+
+.content {
+  width: 100%;
 }

@@ -6,4 +6,6 @@ export interface Task {
   date: firebase.firestore.Timestamp;
   subtask?: Task[];
   complete: boolean;
+  subtaskCount?: number;
+  description?: string;
 }

@@ -61,6 +61,7 @@ import { NoteDetailsComponent } from './notes/note-details/note-details.componen
 import { NoteSearchBarComponent } from './notes/note-details/note-search-bar/note-search-bar.component';
 import { NoteActionBarComponent } from './notes/note-details/note-action-bar/note-action-bar.component';
 import { IconsModule } from './icons/icons.module';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -141,6 +142,7 @@ import { IconsModule } from './icons/icons.module';
     MatChipsModule,
     MatTreeModule,
     MatPaginatorModule,
+    MatDividerModule,
     MarkdownModule.forRoot(),
     ClipboardModule,
     MatGridListModule,

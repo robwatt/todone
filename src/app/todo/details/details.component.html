@@ -1,5 +1,5 @@
-<div class="details">
-  <div fxLayout="row" fxLayoutAlign="space-between center">
+<div class="details w-full">
+  <div class="flex flex-row">
     <mat-toolbar>
       <span>Task</span>
       <span class="spacer"></span>
@@ -10,8 +10,14 @@
   </div>
   <p class="details--title">{{ task.name }}</p>
   <div class="details--content">
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput [(ngModel)]="task.description">
+        {{ task.description }}
+      </textarea>
+    </mat-form-field>
     <form #subTaskForm="ngForm" (ngSubmit)="addSubTask(subTaskForm)" novalidate>
-      <mat-form-field appearance="fill" class="add-subtask">
+      <mat-form-field appearance="outline" class="add-subtask">
         <mat-label>Add Sub-task</mat-label>
         <input
           matInput
